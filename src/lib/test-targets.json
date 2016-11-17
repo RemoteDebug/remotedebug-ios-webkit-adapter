@@ -1,0 +1,82 @@
+[ {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/A03CDDF6-3B45-4EC1-A1EA-0B70C320DF1C",
+   "faviconUrl": "https://www.google.dk/favicon.ico",
+   "id": "A03CDDF6-3B45-4EC1-A1EA-0B70C320DF1C",
+   "title": "New Tab",
+   "type": "page",
+   "url": "chrome://newtab/",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/A03CDDF6-3B45-4EC1-A1EA-0B70C320DF1C"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/29734472-D8E3-4292-A20B-527AA497C522",
+   "faviconUrl": "https://kenneth.io/favicon.ico",
+   "id": "29734472-D8E3-4292-A20B-527AA497C522",
+   "title": "Kenneth Auchenberg",
+   "type": "page",
+   "url": "https://kenneth.io/",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/29734472-D8E3-4292-A20B-527AA497C522"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/B8EC6EE2-411D-4A1A-A9DE-7990933B9607",
+   "faviconUrl": "chrome://extension-icon/pgphcomnlaojlmmcjmiddhdapjpbgeoc/24/1",
+   "id": "B8EC6EE2-411D-4A1A-A9DE-7990933B9607",
+   "title": "Send from Gmail (by Google)",
+   "type": "background_page",
+   "url": "chrome-extension://pgphcomnlaojlmmcjmiddhdapjpbgeoc/_generated_background_page.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/B8EC6EE2-411D-4A1A-A9DE-7990933B9607"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/A36C6530-24A6-4C1D-ACA1-9458AC8A4114",
+   "faviconUrl": "chrome://extension-icon/niloccemoadcdkdjlinkgdfekeahmflj/24/1",
+   "id": "A36C6530-24A6-4C1D-ACA1-9458AC8A4114",
+   "title": "Save to Pocket",
+   "type": "background_page",
+   "url": "chrome-extension://niloccemoadcdkdjlinkgdfekeahmflj/html/background.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/A36C6530-24A6-4C1D-ACA1-9458AC8A4114"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/F608DC23-EC90-419E-B28D-E7748FBB7112",
+   "faviconUrl": "chrome://extension-icon/mpbpobfflnpcgagjijhmgnchggcjblin/24/1",
+   "id": "F608DC23-EC90-419E-B28D-E7748FBB7112",
+   "title": "SPDY indicator",
+   "type": "background_page",
+   "url": "chrome-extension://mpbpobfflnpcgagjijhmgnchggcjblin/_generated_background_page.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/F608DC23-EC90-419E-B28D-E7748FBB7112"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/DECE11A7-BE3E-4186-A09D-FD3121CE2638",
+   "faviconUrl": "chrome://extension-icon/jnkmfdileelhofjcijamephohjechhna/24/1",
+   "id": "DECE11A7-BE3E-4186-A09D-FD3121CE2638",
+   "title": "Google Analytics Debugger",
+   "type": "background_page",
+   "url": "chrome-extension://jnkmfdileelhofjcijamephohjechhna/_generated_background_page.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/DECE11A7-BE3E-4186-A09D-FD3121CE2638"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/868AB849-8007-495E-AD3F-34B412683ED4",
+   "faviconUrl": "chrome://extension-icon/gplegfbjlmmehdoakndmohflojccocli/24/1",
+   "id": "868AB849-8007-495E-AD3F-34B412683ED4",
+   "title": "PageSpeed Insights (by Google)",
+   "type": "background_page",
+   "url": "chrome-extension://gplegfbjlmmehdoakndmohflojccocli/BackgroundPage.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/868AB849-8007-495E-AD3F-34B412683ED4"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/3F0EE4CC-E378-4312-8F59-0A14DDC6702E",
+   "faviconUrl": "chrome://extension-icon/chklaanhfefbnpoihckbnefhakgolnmc/24/1",
+   "id": "3F0EE4CC-E378-4312-8F59-0A14DDC6702E",
+   "title": "JSONView",
+   "type": "background_page",
+   "url": "chrome-extension://chklaanhfefbnpoihckbnefhakgolnmc/_generated_background_page.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/3F0EE4CC-E378-4312-8F59-0A14DDC6702E"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "/devtools/inspector.html?ws=localhost:9222/devtools/page/8162468F-33D2-4E39-B5D4-8B81DE74B49E",
+   "faviconUrl": "chrome://extension-icon/boadgeojelhgndaghljhdicfkmllpafd/24/1",
+   "id": "8162468F-33D2-4E39-B5D4-8B81DE74B49E",
+   "title": "Google Cast",
+   "type": "background_page",
+   "url": "chrome-extension://boadgeojelhgndaghljhdicfkmllpafd/background.html",
+   "webSocketDebuggerUrl": "ws://localhost:9222/devtools/page/8162468F-33D2-4E39-B5D4-8B81DE74B49E"
+} ]
