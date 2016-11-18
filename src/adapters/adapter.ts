@@ -51,7 +51,7 @@ export class Adapter extends EventEmitter {
     }
 
     public start(): void {
-        Logger.log('adapter.start')
+        Logger.log('adapter.start');
         if (this._options.proxyExePath) {
             // Start the Proxy
             this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs);

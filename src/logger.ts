@@ -8,7 +8,7 @@ class LoggerUtil {
     }
 
     public log(msg: string): void {
-        console.log.apply(this, Array.prototype.slice.call(arguments))
+        console.log.apply(this, Array.prototype.slice.call(arguments));
     }
 
     public error(msg: string): void {

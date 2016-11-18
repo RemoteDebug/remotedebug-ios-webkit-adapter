@@ -1,18 +1,19 @@
 #!/usr/bin/env node
 
 import { ProxyServer } from './server';
-var optimist = require('optimist');
+const optimist = require('optimist');
+const info = require('../package');
 
-process.title = 'remotedebug-ios-webkit-adapter'
+process.title = 'remotedebug-ios-webkit-adapter';
 
-var argv = optimist
+let argv = optimist
   .usage('Usage: [options]')
   .alias('p', 'port').describe('p', 'the adapter listerning post').default('p', 9000)
   .describe('version', 'prints current version').boolean('boolean')
-  .argv
+  .argv;
 
 if (argv.version) {
-  console.error(require('./package').version);
+  console.error(info.version);
   process.exit(0);
 }
 
@@ -24,8 +25,4 @@ console.log(`remotedebug-ios-webkit-adapter is listening on port ${port}`);
 process.on('SIGINT', function () {
   server.stop();
   process.exit();
-})
-
-
-
-
+});

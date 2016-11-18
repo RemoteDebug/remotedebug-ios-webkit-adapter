@@ -36,7 +36,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._styleMap = new Map<string, any>();
 
         this._target.on('tools::DOM.getDocument', () => this.onDomGetDocument());
-        
+
         this._target.addMessageFilter('tools::CSS.setStyleTexts', (msg) => this.onSetStyleTexts(msg));
         this._target.addMessageFilter('tools::CSS.getMatchedStylesForNode', (msg) => this.onGetMatchedStylesForNode(msg));
         this._target.addMessageFilter('tools::CSS.getBackgroundColors', (msg) => this.onGetBackgroundColors(msg));
@@ -49,29 +49,29 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Page.screencastFrameAck', (msg) => this.onScreencastFrameAck(msg));
         this._target.addMessageFilter('tools::Page.getNavigationHistory', (msg) => this.onGetNavigationHistory(msg));
         this._target.addMessageFilter('tools::Page.setOverlayMessage', (msg) => { msg.method = 'Debugger.setOverlayMessage'; return Promise.resolve(msg); });
-        
+
         this._target.addMessageFilter('tools::DOM.enable', (msg) => this.onDomEnable(msg));
         this._target.addMessageFilter('tools::DOM.setInspectMode', (msg) => this.onSetInpsectMode(msg));
         this._target.addMessageFilter('tools::DOM.setInspectedNode', (msg) => { msg.method = 'Console.addInspectedNode'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::DOM.pushNodesByBackendIdsToFrontend', (msg) => this.onPushNodesByBackendIdsToFrontend(msg));
         this._target.addMessageFilter('tools::DOM.getBoxModel', (msg) => this.onGetBoxModel(msg));
         this._target.addMessageFilter('tools::DOM.getNodeForLocation', (msg) => this.onGetNodeForLocation(msg));
-        
+
         this._target.addMessageFilter('tools::DOMDebugger.getEventListeners', (msg) => this.DOMDebuggerOnGetEventListeners(msg));
-        
+
         this._target.addMessageFilter('tools::Debugger.canSetScriptSource', (msg) => this.onCanSetScriptSource(msg));
         this._target.addMessageFilter('tools::Debugger.setBlackboxPatterns', (msg) => this.onSetBlackboxPatterns(msg));
         this._target.addMessageFilter('target::Debugger.scriptParsed', (msg) => this.onScriptParsed(msg));
-          
-        this._target.addMessageFilter('tools::Emulation.canEmulate', (msg) => this.onCanEmulate(msg) );
+
+        this._target.addMessageFilter('tools::Emulation.canEmulate', (msg) => this.onCanEmulate(msg));
         this._target.addMessageFilter('tools::Emulation.setTouchEmulationEnabled', (msg) => { msg.method = 'Page.setTouchEmulationEnabled'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Emulation.setScriptExecutionDisabled', (msg) => { msg.method = 'Page.setScriptExecutionDisabled'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Emulation.setEmulatedMedia', (msg) => { msg.method = 'Page.setEmulatedMedia'; return Promise.resolve(msg); });
-        
+
         this._target.addMessageFilter('tools::Rendering.setShowPaintRects', (msg) => { msg.method = 'Page.setShowPaintRects'; return Promise.resolve(msg); });
-        
+
         this._target.addMessageFilter('tools::Input.emulateTouchFromMouseEvent', (msg) => this.onEmulateTouchFromMouseEvent(msg));
-        
+
         this._target.addMessageFilter('tools::Network.getCookies', (msg) => { msg.method = 'Page.getCookies'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.deleteCookie', (msg) => { msg.method = 'Page.deleteCookie'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.setMonitoringXHREnabled', (msg) => { msg.method = 'Console.setMonitoringXHREnabled'; return Promise.resolve(msg); });
@@ -96,7 +96,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         for (let i = 0; i < msg.params.edits.length; i++) {
             const edit = msg.params.edits[i];
             const paramsGetStyleSheet = {
-                    styleSheetId: edit.styleSheetId
+                styleSheetId: edit.styleSheetId
             };
 
             // iOS uses ordinals to map CSSRules to a location in the document. Chromium uses ranges.
@@ -123,7 +123,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
                         return this._target.callTarget('CSS.setStyleText', params).then((setStyleResult) => {
                             this.mapStyle(setStyleResult.style, '');
                             return setStyleResult.style;
-                            });
+                        });
                     }
                 }
             });
@@ -146,10 +146,10 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
     // Called on a Chrome range and an iOS range
     private compareRanges(rangeLeft: any, rangeRight: any) {
-        return  rangeLeft.startLine === rangeRight.startLine &&
-                rangeLeft.endLine === rangeRight.endLine &&
-                rangeLeft.startColumn === rangeRight.startColumn &&
-                rangeLeft.endColumn === rangeRight.endColumn;
+        return rangeLeft.startLine === rangeRight.startLine &&
+            rangeLeft.endLine === rangeRight.endLine &&
+            rangeLeft.startColumn === rangeRight.startColumn &&
+            rangeLeft.endColumn === rangeRight.endColumn;
     }
 
     private onGetMatchedStylesForNode(msg: any): Promise<any> {
@@ -315,23 +315,23 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
             return this._target.callTarget('DOM.getEventListenersForNode', getEventListenersForNodeParams);
         })
-        .then((result) => {
-            const mappedListeners = result.listeners.map(listener => {
-                return {
-                    type: listener.type,
-                    useCapture: listener.useCapture,
-                    passive: false, // iOS doesn't support this property, http://compatibility.remotedebug.org/DOM/Safari%20iOS%209.3/types/EventListener,
-                    location:  listener.location,
-                    hander:  listener.hander
+            .then((result) => {
+                const mappedListeners = result.listeners.map(listener => {
+                    return {
+                        type: listener.type,
+                        useCapture: listener.useCapture,
+                        passive: false, // iOS doesn't support this property, http://compatibility.remotedebug.org/DOM/Safari%20iOS%209.3/types/EventListener,
+                        location: listener.location,
+                        hander: listener.hander
+                    };
+                });
+
+                const mappedResult = {
+                    listeners: mappedListeners
                 };
+
+                this._target.fireResultToTools(msg.id, mappedResult);
             });
-
-            const mappedResult = {
-                listeners: mappedListeners
-            };
-
-            this._target.fireResultToTools(msg.id, mappedResult);
-        });
 
         return Promise.resolve(null);
 

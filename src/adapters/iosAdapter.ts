@@ -29,16 +29,14 @@ export class IOSAdapter extends AdapterCollection {
             proxyExeArgs: proxySettings.proxyArgs
         });
 
-        Logger.log(this._url)
-
         this._proxySettings = proxySettings;
         this._protocolMap = new Map<Target, IOSProtocol>();
     }
 
     public getTargets(): Promise<ITarget[]> {
 
-        Logger.log('iosAdapter.getTargets')
-        Logger.log(this._url)
+        Logger.log('iosAdapter.getTargets');
+        Logger.log(this._url);
 
         return new Promise((resolve) => {
             request(this._url, (error: any, response: http.IncomingMessage, body: any) => {

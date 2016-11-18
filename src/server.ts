@@ -19,7 +19,7 @@ export class ProxyServer extends EventEmitter {
     private _serverPort: number;
     private _adapter: Adapter;
     private _clients: Map<ws, string>;
-    
+
     constructor() {
         super();
         process.on('SIGINT', () => this.stop());
@@ -66,7 +66,7 @@ export class ProxyServer extends EventEmitter {
         if (url.lastIndexOf('/') === url.length - 1) {
             url = url.substr(0, url.length - 1);
         }
-        Logger.log(`server.onServerRequest`, url)
+        Logger.log(`server.onServerRequest`, url);
 
         // This is a work around to the fact that the server does not always refresh as expected
         // We still parse the json as normal, but also kill and restart the server
@@ -84,10 +84,12 @@ export class ProxyServer extends EventEmitter {
             });
         } else if (url === '/json/version') {
 
-            let data = [{
-                "Browser": "Safari",
-                "Protocol-Version": "1.2",
-            }]
+            let data = [
+                {
+                    'Browser': 'Safari',
+                    'Protocol-Version': '1.2'
+                }
+            ];
 
             response.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
             response.write(JSON.stringify(data, null, 2));
