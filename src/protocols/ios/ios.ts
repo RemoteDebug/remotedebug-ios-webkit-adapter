@@ -51,7 +51,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Page.setOverlayMessage', (msg) => { msg.method = 'Debugger.setOverlayMessage'; return Promise.resolve(msg); });
 
         this._target.addMessageFilter('tools::DOM.enable', (msg) => this.onDomEnable(msg));
-        this._target.addMessageFilter('tools::DOM.setInspectMode', (msg) => this.onSetInpsectMode(msg));
+        this._target.addMessageFilter('tools::DOM.setInspectMode', (msg) => this.onSetInspectMode(msg));
         this._target.addMessageFilter('tools::DOM.setInspectedNode', (msg) => { msg.method = 'Console.addInspectedNode'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::DOM.pushNodesByBackendIdsToFrontend', (msg) => this.onPushNodesByBackendIdsToFrontend(msg));
         this._target.addMessageFilter('tools::DOM.getBoxModel', (msg) => this.onGetBoxModel(msg));
@@ -285,7 +285,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         return Promise.resolve(null);
     }
 
-    private onSetInpsectMode(msg: any): Promise<any> {
+    private onSetInspectMode(msg: any): Promise<any> {
         msg.method = 'DOM.setInspectModeEnabled';
         msg.params.enabled = (msg.params.mode === 'searchForNode');
         delete msg.params.mode;
