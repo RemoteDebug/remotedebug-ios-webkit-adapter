@@ -70,7 +70,7 @@ export class IOSAdapter extends AdapterCollection {
         }).then((devices: IIOSDeviceTarget[]) => {
             // Now start up all the adapters
             devices.forEach(d => {
-                const adapterId = d.deviceId;
+                const adapterId = `${this._id}_${d.deviceId}`;
 
                 if (!this._adapters.has(adapterId)) {
                     const parts = d.url.split(':');
@@ -79,7 +79,7 @@ export class IOSAdapter extends AdapterCollection {
                         const port = parseInt(parts[1], 10);
 
                         // Create a new adapter for this device and add it to our list
-                        const adapter = new Adapter(`${this._id}/${adapterId}`, this._proxyUrl, { port: port });
+                        const adapter = new Adapter(adapterId, this._proxyUrl, { port: port });
                         adapter.start();
                         adapter.on('socketClosed', (id) => {
                             this.emit('socketClosed', id);
