@@ -14,7 +14,7 @@ import { Adapter } from './adapter';
 import { Target } from '../protocols/target';
 import { AdapterCollection } from './adapterCollection';
 import { ITarget, IIOSDeviceTarget, IIOSProxySettings } from './adapterInterfaces';
-import { IOSProtocol, IIOSProtocolOptions } from '../protocols/ios/ios';
+import { IOSProtocol } from '../protocols/ios/ios';
 import { IOS8Protocol } from '../protocols/ios/ios8';
 import { IOS9Protocol } from '../protocols/ios/ios9';
 
@@ -203,18 +203,14 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     private getProtocolFor(version: string, target: Target): IOSProtocol {
-        const options: IIOSProtocolOptions = {
-            useScreencast: true
-        };
-
         const parts = version.split('.');
         if (parts.length > 0) {
             const major = parseInt(parts[0], 10);
             if (major <= 8) {
-                return new IOS8Protocol(target, options);
+                return new IOS8Protocol(target);
             }
         }
 
-        return new IOS9Protocol(target, options);
+        return new IOS9Protocol(target);
     }
 }

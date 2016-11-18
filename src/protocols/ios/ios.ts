@@ -19,65 +19,67 @@ interface IDisabledStyle {
     range: IRange;
 }
 
-export interface IIOSProtocolOptions {
-    useScreencast: boolean;
-}
-
 export abstract class IOSProtocol extends ProtocolAdapter {
     public static BEGIN_COMMENT: string = '/* ';
     public static END_COMMENT: string = ' */';
     public static SEPARATOR: string = ': ';
 
-    protected _options: IIOSProtocolOptions;
     protected _styleMap: Map<string, any>;
     protected _isEvaluating: boolean;
     protected _lastScriptEval: string;
     protected _lastNodeId: number;
     protected _screencastSession: ScreencastSession;
 
-    constructor(target: Target, options?: IIOSProtocolOptions) {
+    constructor(target: Target) {
         super(target);
 
-        this._options = options || {
-            useScreencast: false
-        };
         this._styleMap = new Map<string, any>();
 
         this._target.on('tools::DOM.getDocument', () => this.onDomGetDocument());
+        
         this._target.addMessageFilter('tools::CSS.setStyleTexts', (msg) => this.onSetStyleTexts(msg));
         this._target.addMessageFilter('tools::CSS.getMatchedStylesForNode', (msg) => this.onGetMatchedStylesForNode(msg));
         this._target.addMessageFilter('tools::CSS.getBackgroundColors', (msg) => this.onGetBackgroundColors(msg));
         this._target.addMessageFilter('tools::CSS.addRule', (msg) => this.onAddRule(msg));
         this._target.addMessageFilter('tools::CSS.getPlatformFontsForNode', (msg) => this.onGetPlatformFontsForNode(msg));
+        this._target.addMessageFilter('target::CSS.getMatchedStylesForNode', (msg) => this.onGetMatchedStylesForNodeResult(msg));
+
         this._target.addMessageFilter('tools::Page.startScreencast', (msg) => this.onStartScreencast(msg));
         this._target.addMessageFilter('tools::Page.stopScreencast', (msg) => this.onStopScreencast(msg));
         this._target.addMessageFilter('tools::Page.screencastFrameAck', (msg) => this.onScreencastFrameAck(msg));
         this._target.addMessageFilter('tools::Page.getNavigationHistory', (msg) => this.onGetNavigationHistory(msg));
         this._target.addMessageFilter('tools::Page.setOverlayMessage', (msg) => { msg.method = 'Debugger.setOverlayMessage'; return Promise.resolve(msg); });
+        
         this._target.addMessageFilter('tools::DOM.enable', (msg) => this.onDomEnable(msg));
         this._target.addMessageFilter('tools::DOM.setInspectMode', (msg) => this.onSetInpsectMode(msg));
         this._target.addMessageFilter('tools::DOM.setInspectedNode', (msg) => { msg.method = 'Console.addInspectedNode'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::DOM.pushNodesByBackendIdsToFrontend', (msg) => this.onPushNodesByBackendIdsToFrontend(msg));
         this._target.addMessageFilter('tools::DOM.getBoxModel', (msg) => this.onGetBoxModel(msg));
         this._target.addMessageFilter('tools::DOM.getNodeForLocation', (msg) => this.onGetNodeForLocation(msg));
+        
         this._target.addMessageFilter('tools::DOMDebugger.getEventListeners', (msg) => this.DOMDebuggerOnGetEventListeners(msg));
-        this._target.addMessageFilter('tools::Emulation.canEmulate', (msg) => this.onCanEmulate(msg) );
+        
         this._target.addMessageFilter('tools::Debugger.canSetScriptSource', (msg) => this.onCanSetScriptSource(msg));
         this._target.addMessageFilter('tools::Debugger.setBlackboxPatterns', (msg) => this.onSetBlackboxPatterns(msg));
+        this._target.addMessageFilter('target::Debugger.scriptParsed', (msg) => this.onScriptParsed(msg));
+          
+        this._target.addMessageFilter('tools::Emulation.canEmulate', (msg) => this.onCanEmulate(msg) );
         this._target.addMessageFilter('tools::Emulation.setTouchEmulationEnabled', (msg) => { msg.method = 'Page.setTouchEmulationEnabled'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Emulation.setScriptExecutionDisabled', (msg) => { msg.method = 'Page.setScriptExecutionDisabled'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Emulation.setEmulatedMedia', (msg) => { msg.method = 'Page.setEmulatedMedia'; return Promise.resolve(msg); });
+        
         this._target.addMessageFilter('tools::Rendering.setShowPaintRects', (msg) => { msg.method = 'Page.setShowPaintRects'; return Promise.resolve(msg); });
+        
         this._target.addMessageFilter('tools::Input.emulateTouchFromMouseEvent', (msg) => this.onEmulateTouchFromMouseEvent(msg));
+        
         this._target.addMessageFilter('tools::Network.getCookies', (msg) => { msg.method = 'Page.getCookies'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.deleteCookie', (msg) => { msg.method = 'Page.deleteCookie'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.setMonitoringXHREnabled', (msg) => { msg.method = 'Console.setMonitoringXHREnabled'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.canEmulateNetworkConditions', (msg) => this.onCanEmulateNetworkConditions(msg));
 
-        this._target.addMessageFilter('target::CSS.getMatchedStylesForNode', (msg) => this.onGetMatchedStylesForNodeResult(msg));
         this._target.addMessageFilter('target::Runtime.executionContextCreated', (msg) => this.onExecutionContextCreated(msg));
         this._target.addMessageFilter('target::Runtime.evaluate', (msg) => this.onEvaluate(msg));
-        this._target.addMessageFilter('target::Debugger.scriptParsed', (msg) => this.onScriptParsed(msg));
+
         this._target.addMessageFilter('target::Inspector.inspect', (msg) => this.onInspect(msg));
     }
 
@@ -401,10 +403,6 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onStartScreencast(msg: any): Promise<any> {
-        if (!this._options.useScreencast) {
-            return this._target.replyWithEmpty(msg);
-        }
-
         const format: string = msg.params.format;
         const quality: number = msg.params.quality;
         const maxWidth: number = msg.params.maxWidth;

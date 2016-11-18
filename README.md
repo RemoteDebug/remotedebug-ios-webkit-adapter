@@ -47,7 +47,6 @@ remotedebug_ios_webkit_adapter --port=9000
 
 4. Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
 
-
 ## Options and configuration
 
 ## How to contribute

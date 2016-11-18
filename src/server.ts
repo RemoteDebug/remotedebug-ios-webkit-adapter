@@ -6,26 +6,24 @@ import * as http from 'http';
 import * as ws from 'ws';
 import { Server as WebSocketServer } from 'ws';
 import { EventEmitter } from 'events';
-import { AdapterCollection } from './adapters/adapterCollection';
-import { AllAdapters } from './adapters/allAdapters';
 import { Logger } from './logger';
-import { Multiplexor } from './multiplexor';
+
+import { Adapter } from './adapters/adapter';
+import { IOSAdapter } from './adapters/iosAdapter';
+import { IIOSProxySettings } from './adapters/adapterInterfaces';
+// import { TestAdapter } from './adapters/testAdapter';
 
 export class ProxyServer extends EventEmitter {
     private _hs: http.Server;
     private _wss: WebSocketServer;
     private _serverPort: number;
-    private _adapterCollection: AdapterCollection;
+    private _adapter: Adapter;
     private _clients: Map<ws, string>;
-    private _multiplexor: Multiplexor;
-
+    
     constructor() {
         super();
         process.on('SIGINT', () => this.stop());
         process.on('SIGTERM', () => this.stop());
-
-        this._multiplexor = new Multiplexor();
-
     }
 
     public run(serverPort: number): number {
@@ -40,11 +38,15 @@ export class ProxyServer extends EventEmitter {
         this._hs.listen(this._serverPort);
         const port = this._hs.address().port;
 
-        this._adapterCollection = new AllAdapters(`ws://localhost:${port}`);
-        this._adapterCollection.start();
-        this._adapterCollection.on('socketClosed', (id) => {
-            this.emit('socketClosed', id);
+        const settings = IOSAdapter.getProxySettings({
+            proxyPath: null,
+            proxyPort: (port + 100),
+            proxyArgs: null
         });
+
+        this._adapter = new IOSAdapter(`/ios`, `ws://localhost:${port}`, <IIOSProxySettings>settings);
+        // this._adapter = new TestAdapter('/test', `ws://localhost:${port}`);
+        this._adapter.start();
 
         return port;
     }
@@ -55,7 +57,7 @@ export class ProxyServer extends EventEmitter {
             this._hs = null;
         }
 
-        this._adapterCollection.stop();
+        this._adapter.stop();
     }
 
     private onServerRequest(request: http.IncomingMessage, response: http.ServerResponse): void {
@@ -68,38 +70,36 @@ export class ProxyServer extends EventEmitter {
 
         // This is a work around to the fact that the server does not always refresh as expected
         // We still parse the json as normal, but also kill and restart the server
-        if (url === '/json?forcerefresh=true') {
-            this._adapterCollection.forceRefresh();
+        if (url === '/refresh') {
+            this._adapter.forceRefresh();
             this.emit('forceRefresh');
-            url = '/json';
-        }
-
-        if (url === ('/json') || url === '/json/list') {
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            response.end();
+        } else if (url === ('/json') || url === '/json/list') {
             // Respond with json
-            this._adapterCollection.getTargets().then((targets) => {
-                response.writeHead(200, { 'Content-Type': 'text/json' });
-                response.write(JSON.stringify(targets));
+            this._adapter.getTargets().then((targets) => {
+                response.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
+                response.write(JSON.stringify(targets, null, 2));
                 response.end();
             });
         } else if (url === '/json/version') {
 
-            let data = {
-                "Browser": "Chrome/56.0.2920.0",
+            let data = [{
+                "Browser": "Safari",
                 "Protocol-Version": "1.2",
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2920.0 Safari/537.36",
-                "WebKit-Version": "537.36 (@378fc3fd49ebb678fc98cd99831b858fd304691f)"
-            }
+            }]
 
-            response.writeHead(200, { 'Content-Type': 'text/json' });
-            response.write(JSON.stringify(data));
+            response.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
+            response.write(JSON.stringify(data, null, 2));
             response.end();
         } else if (url === '/protocol.json') {
             // Write out protocol.json file
-            response.writeHead(200, { 'Content-Type': 'text/json' });
+            response.writeHead(200, { 'Content-Type': 'application/json; charset=UTF-8' });
             response.end();
-        } else if (url === '') {
+        } else if (url === '' || url === '/') {
             // Respond with attach page
             response.writeHead(200, { 'Content-Type': 'text/html' });
+            response.write('Hello from RemoteDebug iOS WebKit Adapter');
             response.end();
         } else {
             // Not found
@@ -114,24 +114,9 @@ export class ProxyServer extends EventEmitter {
 
         let connection = <EventEmitter>ws;
 
-        if (this._multiplexor && url.substr(1, 6) === 'chrome') {
-            // The experimental multiplexing option is on and we are connecting to a chrome instance
-            // So multiplex to the first ios target
-            this._adapterCollection.getTargets().then((targets) => {
-                for (let i = 0; i < targets.length; i++) {
-                    if (targets[i].adapterType === '_ios') {
-                        this._multiplexor.start(ws, targets[i].webSocketDebuggerUrl);
-                        break;
-                    }
-                }
-            });
-
-            connection = this._multiplexor;
-        }
-
-        this._adapterCollection.connectTo(url, ws);
+        this._adapter.connectTo(url, ws);
         connection.on('message', (msg) => {
-            this._adapterCollection.forwardTo(url, msg);
+            this._adapter.forwardTo(url, msg);
         });
     }
 }
