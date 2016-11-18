@@ -4,6 +4,7 @@
 
 import * as fs from 'fs';
 import { Adapter } from './adapter';
+import * as path from 'path';
 import { ITarget } from './adapterInterfaces';
 
 export class TestAdapter extends Adapter {
@@ -12,7 +13,7 @@ export class TestAdapter extends Adapter {
     constructor(id: string, proxyUrl: string) {
         super(id, proxyUrl, {});
 
-        this._jsonPath = __dirname + '\\..\\..\\..\\lib\\test-targets.json';
+        this._jsonPath = path.join(__dirname, '../../src/lib/test-targets.json');
     }
 
     public getTargets(): Promise<ITarget[]> {
