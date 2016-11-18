@@ -2,7 +2,10 @@
     "name": "remotedebug-ios-webkit-adapter",
     "productName": "RemoteDebug iOS WebKit Adapter",
     "version": "0.1.0",
-     "scripts": {
+    "bin": {
+        "remotedebug-ios-webkit-adapter": "./out/index.js"
+    },
+    "scripts": {
         "postinstall": "typings install",
         "start": "gulp build && node out/index.js",
         "build": "gulp build",
@@ -20,6 +23,7 @@
         "gulp-sourcemaps": "^1.6.0",
         "gulp-tslint": "^5.0.0",
         "gulp-typescript": "^2.13.4",
+        "optimist": "^0.6.1",
         "mocha": "^2.5.3",
         "mockery": "^1.7.0",
         "mock-socket": "^3.0.1",
