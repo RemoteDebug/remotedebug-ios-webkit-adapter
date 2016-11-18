@@ -15,11 +15,10 @@ const fs = require('fs');
 const path = require('path');
 
 const shellSources = [
-    'src/**/*.ts',
+    'src/**/*',
     'test/**/*.ts',
     'test/*.ts',
-    'typings/globals/**/*.ts',
-    'config.ts'
+    'typings/globals/**/*.ts'
 ];
 
 const lintSources = [
@@ -39,20 +38,7 @@ gulp.task('build', function () {
         .pipe(gulp.dest('./out'));
 });
 
-gulp.task('watch', ['build'], function () {
-    const all = shellSources;
-    gulp.watch(all, ['build']);
-});
-
-gulp.task('lint', function () {
-    console.log(lintSources)
-    return gulp.src(lintSources)
-        .pipe(tslint({formatter: "full"}))
-        .pipe(tslint.report('verbose'));
-});
-
 gulp.task('build-tests', function () {
-
     const sources = [
         'test/**/*.ts',
         'test/*.ts',
@@ -67,6 +53,13 @@ gulp.task('build-tests', function () {
         .pipe(gulp.dest('./out/test'));
 });
 
+gulp.task('lint', function () {
+    console.log(lintSources)
+    return gulp.src(lintSources)
+        .pipe(tslint({formatter: "full"}))
+        .pipe(tslint.report('verbose'));
+});
+
 gulp.task('test', ['build-tests'], function() {
     process.env.NODE_ENV = 'development';
     return gulp.src('out/test/**/*.test.js', { read: false })
@@ -77,8 +70,11 @@ gulp.task('test', ['build-tests'], function() {
         });
 });
 
-gulp.task('build-test', ['tslint', 'test']);
+gulp.task('watch-test', ['build-tests'], function() {
+     return gulp.watch(shellSources, ['build-tests']);
+});
 
-gulp.task('watch-test', ['build-test'], function() {
-     return gulp.watch(shellSources, ['build-test']);
+gulp.task('watch', ['build'], function () {
+    const all = shellSources;
+    gulp.watch(all, ['build']);
 });
