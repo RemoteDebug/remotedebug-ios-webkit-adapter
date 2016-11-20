@@ -1,18 +1,9 @@
-<h1 align="center">
-  <br>
-    <img src="lib/icon.png" alt="logo" width="200">
-  <br>
-  RemoteDebug iOS WebKit Adapter
-  <br>
-  <br>
-</h1>
+# RemoteDebug iOS WebKit Adapter
 
-<h4 align="center">Debug your websites running on iOS devices connected to your computer over USB. </h4>
+<a href="https://travis-ci.com/RemoteDebug/remotedebug-ios-webkit-adapter"><img src="https://travis-ci.com/RemoteDebug/remotedebug-ios-webkit-adapter.svg?token=WQL8U9tKa9M9yQmjXHTp" alt="Travis"></a>
 
-<p align="center">
-  <a href="https://travis-ci.com/RemoteDebug/remotedebug-ios-webkit-adapter"><img src="https://travis-ci.com/RemoteDebug/remotedebug-ios-webkit-adapter.svg?token=WQL8U9tKa9M9yQmjXHTp" alt="Travis"></a>
-  <a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
-</p>
+<a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
+
 
 RemoteDebug iOS WebKit Adapter is an protocol adapter that enables tools compatible with the [RemoteDebug Core Protocol Specification]() to work with Safari Mobile / WebKit instances running in iOS devices. 
 
