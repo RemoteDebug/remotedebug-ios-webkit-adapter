@@ -17,6 +17,11 @@ if (argv.version) {
   process.exit(0);
 }
 
+if (argv.help) {
+  console.log(optimist.help());
+  process.exit(0);
+}
+
 const server = new ProxyServer();
 const port = server.run(argv.port);
 
