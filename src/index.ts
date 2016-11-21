@@ -7,7 +7,7 @@ const info = require('../package');
 process.title = 'remotedebug-ios-webkit-adapter';
 
 let argv = optimist
-  .usage('Usage: [options]')
+  .usage('Usage: $0 -p [num]')
   .alias('p', 'port').describe('p', 'the adapter listerning post').default('p', 9000)
   .describe('version', 'prints current version').boolean('boolean')
   .argv;
@@ -21,6 +21,7 @@ if (argv.help) {
   console.log(optimist.help());
   process.exit(0);
 }
+
 
 const server = new ProxyServer();
 const port = server.run(argv.port);
