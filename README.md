@@ -40,6 +40,42 @@ remotedebug_ios_webkit_adapter --port=9000
 
 ## Options and configuration
 
+## Implemented methods
+
+| Domain.method |
+|------- |
+| CSS.setStyleTexts |
+| CSS.getMatchedStylesForNode |
+| CSS.addRule |
+| CSS.getMatchedStylesForNode |
+| Page.startScreencast |
+| Page.stopScreencast |
+| Page.screencastFrameAck |
+| Page.getNavigationHistory |
+| Page.setOverlayMessage |
+|  |
+| DOM.enable |
+| DOM.setInspectMode |
+| DOM.setInspectedNode |
+| DOM.pushNodesByBackendIdsToFrontend |
+| DOM.getBoxModel |
+| DOM.getNodeForLocation |
+| 
+| DOMDebugger.getEventListeners |
+| 
+| Emulation.setTouchEmulationEnabled |
+| Emulation.setScriptExecutionDisabled |
+| Emulation.setEmulatedMedia |
+|  |
+| Rendering.setShowPaintRects |
+|  |
+| Input.emulateTouchFromMouseEvent |
+|  |
+| Network.getCookies |
+| Network.deleteCookie |
+| Network.setMonitoringXHREnabled |
+|-------------- |
+
 ## How to contribute
 
 ```
