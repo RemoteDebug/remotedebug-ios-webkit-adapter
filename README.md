@@ -6,7 +6,7 @@ RemoteDebug iOS WebKit Adapter is an protocol adapter that enables tools compati
 
 ## Getting Started
 
-1) Install dependencies
+### 1) Install dependencies
 
 Before you use this adapter you need to make sure you have the [latest version of iTunes](http://www.apple.com/itunes/download/) installed, as we need a few libraries provided by iTunes to talk to the iOS devices.
 
@@ -21,19 +21,19 @@ brew install libimobiledevice
 brew install ios-webkit-debug-proxy
 ```
 
-2) Instal latest version of the adapter
+### 2) Instal latest version of the adapter
 
 ```
 npm install remotedebug-ios-webkit-adapter -g
 ```
 
-3) Run the adapter from your favorite commandline
+### 3) Run the adapter from your favorite commandline
 
 ```
 remotedebug_ios_webkit_adapter --port=9000
 ```
 
-4) Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
+### 4) Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
 
 ## Configuration
 
@@ -48,39 +48,40 @@ Options:
 
 ## Implemented methods
 
-| Domain.method |
-|------- |
-| CSS.setStyleTexts |
-| CSS.getMatchedStylesForNode |
-| CSS.addRule |
-| CSS.getMatchedStylesForNode |
-| Page.startScreencast |
-| Page.stopScreencast |
-| Page.screencastFrameAck |
-| Page.getNavigationHistory |
-| Page.setOverlayMessage |
-|  |
-| DOM.enable |
-| DOM.setInspectMode |
-| DOM.setInspectedNode |
-| DOM.pushNodesByBackendIdsToFrontend |
-| DOM.getBoxModel |
-| DOM.getNodeForLocation |
-| 
-| DOMDebugger.getEventListeners |
-| 
-| Emulation.setTouchEmulationEnabled |
-| Emulation.setScriptExecutionDisabled |
-| Emulation.setEmulatedMedia |
-|  |
-| Rendering.setShowPaintRects |
-|  |
-| Input.emulateTouchFromMouseEvent |
-|  |
-| Network.getCookies |
-| Network.deleteCookie |
-| Network.setMonitoringXHREnabled |
-|-------------- |
+| Domain.method                              |
+|--------------------------------------------|
+| CSS.setStyleTexts                          |
+| CSS.getMatchedStylesForNode                |
+| CSS.addRule                                |
+| CSS.getMatchedStylesForNode                |
+| Page.startScreencast                       |
+| Page.stopScreencast                        |
+| Page.screencastFrameAck                    |
+| Page.getNavigationHistory                  |
+| Page.setOverlayMessage                     |
+|                                            |
+| DOM.enable                                 |
+| DOM.setInspectMode                         |
+| DOM.setInspectedNode                       |
+| DOM.pushNodesByBackendIdsToFrontend        |
+| DOM.getBoxModel                            |
+| DOM.getNodeForLocation                     |
+|                                            |
+| DOMDebugger.getEventListeners              |
+|                                            |
+| Emulation.setTouchEmulationEnabled         |
+| Emulation.setScriptExecutionDisabled       |
+| Emulation.setEmulatedMedia                 |
+|                                            |
+| Rendering.setShowPaintRects                |
+|                                            |
+| Input.emulateTouchFromMouseEvent           |
+|                                            |
+| Network.getCookies                         |
+| Network.deleteCookie                       |
+| Network.setMonitoringXHREnabled            |
+| ------------------------------------------ |
+
 
 ## How to contribute
 
