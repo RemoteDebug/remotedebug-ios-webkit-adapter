@@ -1,0 +1,12 @@
+language: node_js
+
+node_js:
+    - "6.1"
+
+before_script:
+    - npm install -g gulp
+    - npm install -g typings
+    - typings install
+
+script:
+    - gulp test
