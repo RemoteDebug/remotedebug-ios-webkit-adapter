@@ -1,15 +1,12 @@
 # RemoteDebug iOS WebKit Adapter
 
-<a href="https://travis-ci.com/RemoteDebug/remotedebug-ios-webkit-adapter"><img src="https://travis-ci.com/RemoteDebug/remotedebug-ios-webkit-adapter.svg?token=WQL8U9tKa9M9yQmjXHTp" alt="Travis"></a>
-
-<a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
-
+[![Build Status](https://travis-ci.org/RemoteDebug/remotedebug-ios-webkit-adapter.svg?branch=master)](https://travis-ci.org/RemoteDebug/remotedebug-ios-webkit-adapter) <a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
 
 RemoteDebug iOS WebKit Adapter is an protocol adapter that enables tools compatible with the [RemoteDebug Core Protocol Specification]() to work with Safari Mobile / WebKit instances running in iOS devices. 
 
 ## Getting Started
 
-1. Install dependencies
+1) Install dependencies
 
 Before you use this adapter you need to make sure you have the [latest version of iTunes](http://www.apple.com/itunes/download/) installed, as we need a few libraries provided by iTunes to talk to the iOS devices.
 
@@ -24,21 +21,30 @@ brew install libimobiledevice
 brew install ios-webkit-debug-proxy
 ```
 
-2. Instal latest version of the adapter
+2) Instal latest version of the adapter
 
 ```
 npm install remotedebug-ios-webkit-adapter -g
 ```
 
-3. Run the adapter from your favorite commandline
+3) Run the adapter from your favorite commandline
 
 ```
 remotedebug_ios_webkit_adapter --port=9000
 ```
 
-4. Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
+4) Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
 
-## Options and configuration
+## Configuration
+
+```
+Usage: remotedebug_ios_webkit_adapter --port [num]
+
+Options:
+  -p, --port  the adapter listerning post  [default: 9000]
+  --version   prints current version
+
+```
 
 ## Implemented methods
 
