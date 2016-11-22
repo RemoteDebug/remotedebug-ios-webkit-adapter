@@ -49,6 +49,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Page.screencastFrameAck', (msg) => this.onScreencastFrameAck(msg));
         this._target.addMessageFilter('tools::Page.getNavigationHistory', (msg) => this.onGetNavigationHistory(msg));
         this._target.addMessageFilter('tools::Page.setOverlayMessage', (msg) => { msg.method = 'Debugger.setOverlayMessage'; return Promise.resolve(msg); });
+        this._target.addMessageFilter('tools::Page.configureOverlay', (msg) => { msg.method = 'Debugger.setOverlayMessage'; return Promise.resolve(msg); });
 
         this._target.addMessageFilter('tools::DOM.enable', (msg) => this.onDomEnable(msg));
         this._target.addMessageFilter('tools::DOM.setInspectMode', (msg) => this.onSetInspectMode(msg));
