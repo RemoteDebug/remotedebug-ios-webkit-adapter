@@ -165,7 +165,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
     private onCanEmulate(msg: any): Promise<any> {
         const result = {
-            result: false
+            result: true
         };
         this._target.fireResultToTools(msg.id, result);
         return Promise.resolve(null);
