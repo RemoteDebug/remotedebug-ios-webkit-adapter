@@ -96,12 +96,12 @@ export class ProxyServer extends EventEmitter {
         })
 
         this._es.get('/json/version', (req, res) => {
-            res.json([
-                {
-                    'Browser': 'Safari',
-                    'Protocol-Version': '1.2'
-                }
-            ])
+            res.json({
+                "Browser": "Safari/RemoteDebug iOS Webkit Adapter",
+                "Protocol-Version": "1.2",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2926.0 Safari/537.36",
+                "WebKit-Version": "537.36 (@da59d418f54604ba2451cd0ef3a9cd42c05ca530)"
+            })
         })
 
         this._es.get('/json/protocol', (req, res) => {
