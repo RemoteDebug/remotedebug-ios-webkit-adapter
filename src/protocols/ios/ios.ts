@@ -73,6 +73,10 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
         this._target.addMessageFilter('tools::Input.emulateTouchFromMouseEvent', (msg) => this.onEmulateTouchFromMouseEvent(msg));
 
+        this._target.addMessageFilter('tools::Log.clear', (msg) => { msg.method = 'Console.clearMessages'; return Promise.resolve(msg); });
+        this._target.addMessageFilter('tools::Log.disable', (msg) => { msg.method = 'Console.disable'; return Promise.resolve(msg); });
+        this._target.addMessageFilter('tools::Log.enable', (msg) => { msg.method = 'Console.enable'; return Promise.resolve(msg); });
+
         this._target.addMessageFilter('tools::Network.getCookies', (msg) => { msg.method = 'Page.getCookies'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.deleteCookie', (msg) => { msg.method = 'Page.deleteCookie'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.setMonitoringXHREnabled', (msg) => { msg.method = 'Console.setMonitoringXHREnabled'; return Promise.resolve(msg); });
