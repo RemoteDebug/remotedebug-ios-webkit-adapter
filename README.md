@@ -33,7 +33,9 @@ npm install remotedebug-ios-webkit-adapter -g
 remotedebug_ios_webkit_adapter --port=9000
 ```
 
-### 4) Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
+### 4) Open your favorite tool
+
+Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
 
 ## Configuration
 
@@ -45,6 +47,12 @@ Options:
   --version   prints current version
 
 ```
+
+## Usage with Chrome (Canary) and Chrome DevTools
+
+You can have your iOS targets show up in Chrome's `chrome://inspect` page by leveraing the new network discoverblity feature where you can add the IP of computer running the adapter.
+
+![](.readme/chrome_inspect.png)
 
 ## Implemented methods
 
