@@ -50,7 +50,7 @@ Options:
 
 ## Usage with Chrome (Canary) and Chrome DevTools
 
-You can have your iOS targets show up in Chrome's `chrome://inspect` page by leveraing the new network discoverblity feature where you can add the IP of computer running the adapter.
+You can have your iOS targets show up in Chrome's `chrome://inspect` page by leveraging the new network discoverbility feature where you simple add the IP of computer running the adapter ala `localhost:9000`.
 
 ![](.readme/chrome_inspect.png)
 
