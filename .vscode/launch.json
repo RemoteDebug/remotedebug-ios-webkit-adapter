@@ -9,14 +9,15 @@
       "request": "launch",
       "name": "Launch Program",
       "program": "${workspaceRoot}/out/index.js",
-      "cwd": "${workspaceRoot}/src",
+      "cwd": "${workspaceRoot}",
+      "outFiles": [],
       "sourceMaps": true
     },
     {
-      "type": "node",
+      "type": "node2",
       "request": "attach",
       "name": "Attach to Process",
-      "port": 5858,
+      "port": 9229,
       "outFiles": [],
       "sourceMaps": true
     }
