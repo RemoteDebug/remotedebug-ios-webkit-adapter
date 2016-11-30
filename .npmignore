@@ -1,0 +1,5 @@
+src/
+test/
+typings/
+.readme/
+.vscode
