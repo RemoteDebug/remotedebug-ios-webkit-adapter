@@ -1,37 +1,38 @@
 {
-    "name": "remotedebug-ios-webkit-adapter",
-    "productName": "RemoteDebug iOS WebKit Adapter",
-    "version": "0.1.2",
-    "bin": {
-        "remotedebug_ios_webkit_adapter": "./out/index.js"
-    },
-    "scripts": {
-        "start": "gulp build && node out/index.js",
-        "build": "gulp build",
-        "prepublish": "gulp build",
-        "watch": "gulp watch",
-        "test": "gulp test",
-        "lint": "gulp lint"
-    },
-    "dependencies": {
-        "request": "^2.72.0",
-        "ws": "^1.1.0"
-    },
-    "devDependencies": {
-        "gulp": "^3.9.1",
-        "gulp-mocha": "^2.2.0",
-        "gulp-sourcemaps": "^1.6.0",
-        "gulp-tslint": "^5.0.0",
-        "gulp-typescript": "^2.13.4",
-        "optimist": "^0.6.1",
-        "mocha": "^2.5.3",
-        "mockery": "^1.7.0",
-        "mock-socket": "^3.0.1",
-        "typemoq": "0.0.6",
-        "typescript": "2.0.10",
-        "tslint": "^3.10.2"
-    },
-    "optionalDependencies": {
-        "vs-libimobile": "^0.0.3"
-    }
+  "name": "remotedebug-ios-webkit-adapter",
+  "productName": "RemoteDebug iOS WebKit Adapter",
+  "version": "0.1.2",
+  "bin": {
+    "remotedebug_ios_webkit_adapter": "./out/index.js"
+  },
+  "scripts": {
+    "start": "gulp build && node out/index.js",
+    "build": "gulp build",
+    "prepublish": "gulp build",
+    "watch": "gulp watch",
+    "test": "gulp test",
+    "lint": "gulp lint"
+  },
+  "dependencies": {
+    "express": "^4.14.0",
+    "request": "^2.72.0",
+    "ws": "^1.1.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^2.2.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-tslint": "^5.0.0",
+    "gulp-typescript": "^2.13.4",
+    "optimist": "^0.6.1",
+    "mocha": "^2.5.3",
+    "mockery": "^1.7.0",
+    "mock-socket": "^3.0.1",
+    "typemoq": "0.0.6",
+    "typescript": "2.0.10",
+    "tslint": "^3.10.2"
+  },
+  "optionalDependencies": {
+    "vs-libimobile": "^0.0.3"
+  }
 }
