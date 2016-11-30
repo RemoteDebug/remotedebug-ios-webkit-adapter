@@ -9,6 +9,7 @@
         "postinstall": "typings install",
         "start": "gulp build && node out/index.js",
         "build": "gulp build",
+        "prepublish": "gulp build",
         "watch": "gulp watch",
         "test": "gulp test",
         "lint": "gulp lint"
