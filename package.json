@@ -6,7 +6,6 @@
         "remotedebug_ios_webkit_adapter": "./out/index.js"
     },
     "scripts": {
-        "postinstall": "typings install",
         "start": "gulp build && node out/index.js",
         "build": "gulp build",
         "prepublish": "gulp build",
@@ -29,8 +28,7 @@
         "mockery": "^1.7.0",
         "mock-socket": "^3.0.1",
         "typemoq": "0.0.6",
-        "typescript": "1.8.10",
-        "typings": "^1.0.4",
+        "typescript": "2.0.10",
         "tslint": "^3.10.2"
     },
     "optionalDependencies": {
