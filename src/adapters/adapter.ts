@@ -142,7 +142,7 @@ export class Adapter extends EventEmitter {
 
         // Overwrite the real endpoint with the url of our proxy multiplexor
         t.webSocketDebuggerUrl = `${this._proxyUrl}${this._id}/${t.id}`;
-        let wsUrl = `${this._proxyUrl.replace('ws://', '')}${this._id}/${t.id}`
+        let wsUrl = `${this._proxyUrl.replace('ws://', '')}${this._id}/${t.id}`;
         t.devtoolsFrontendUrl = `https://chrome-devtools-frontend.appspot.com/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=true&ws=${wsUrl}`;
 
         return t;

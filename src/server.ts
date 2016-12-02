@@ -32,8 +32,8 @@ export class ProxyServer extends EventEmitter {
         this._serverPort = serverPort;
         this._clients = new Map<ws, string>();
 
-        this._es = express()
-        this._hs = http.createServer(this._es)
+        this._es = express();
+        this._hs = http.createServer(this._es);
         this._wss = new WebSocketServer({
             server: this._hs
         });
@@ -72,41 +72,41 @@ export class ProxyServer extends EventEmitter {
         this._es.get('/', (req, res) => {
             res.json({
                 msg: 'Hello from RemoteDebug iOS WebKit Adapter'
-            })
-        })
+            });
+        });
 
         this._es.get('/refresh', (req, res) => {
             this._adapter.forceRefresh();
             this.emit('forceRefresh');
             res.json({
                 status: 'ok'
-            })
-        })
+            });
+        });
 
         this._es.get('/json', (req, res) => {
             this._adapter.getTargets().then((targets) => {
-                res.json(targets)
+                res.json(targets);
             });
-        })
+        });
 
         this._es.get('/json/list', (req, res) => {
             this._adapter.getTargets().then((targets) => {
-                res.json(targets)
+                res.json(targets);
             });
-        })
+        });
 
         this._es.get('/json/version', (req, res) => {
             res.json({
-                "Browser": "Safari/RemoteDebug iOS Webkit Adapter",
-                "Protocol-Version": "1.2",
-                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2926.0 Safari/537.36",
-                "WebKit-Version": "537.36 (@da59d418f54604ba2451cd0ef3a9cd42c05ca530)"
-            })
-        })
+                'Browser': 'Safari/RemoteDebug iOS Webkit Adapter',
+                'Protocol-Version': '1.2',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2926.0 Safari/537.36',
+                'WebKit-Version': '537.36 (@da59d418f54604ba2451cd0ef3a9cd42c05ca530)'
+            });
+        });
 
         this._es.get('/json/protocol', (req, res) => {
-            res.json()
-        })
+            res.json();
+        });
 
     }
 

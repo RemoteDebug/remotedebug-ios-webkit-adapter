@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 import { ProxyServer } from './server';
-const optimist = require('optimist');
-const info = require('../package');
+import * as optimist from 'optimist';
+import * as info from '../package';
 
 process.title = 'remotedebug-ios-webkit-adapter';
 
@@ -21,7 +21,6 @@ if (argv.help) {
   console.log(optimist.help());
   process.exit(0);
 }
-
 
 const server = new ProxyServer();
 const port = server.run(argv.port);
