@@ -163,6 +163,8 @@ export class IOSAdapter extends AdapterCollection {
 
         } else if (os.platform() === 'darwin') {
             return '/usr/local/bin/ios_webkit_debug_proxy';
+        } else if (os.platform() === 'linux') {
+            return '/usr/bin/ios_webkit_debug_proxy';
         }
 
         return null;
@@ -182,6 +184,8 @@ export class IOSAdapter extends AdapterCollection {
 
         } else if (os.platform() === 'darwin') {
             return '/usr/local/bin/ideviceinfo';
+        } else if (os.platform() === 'linux') {
+            return '/usr/bin/ideviceinfo';
         }
 
         return null;
