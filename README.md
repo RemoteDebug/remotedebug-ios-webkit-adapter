@@ -31,15 +31,17 @@ brew install ios-webkit-debug-proxy
 npm install remotedebug-ios-webkit-adapter -g
 ```
 
-### 3) Run the adapter from your favorite commandline
+### 3) Run the adapter from your favorite command line
 
 ```
 remotedebug_ios_webkit_adapter --port=9000
 ```
 
+BTW: `ios-webkit-debug-proxy` will be run automatically for you, no need to start it separately.
+
 ### 4) Open your favorite tool
 
-Open your favorite tool such as Chrome DevTool or Visual Studio Code and configure the tool to connect to the protocol adapter.
+Open your favorite tool such as Chrome DevTools or Visual Studio Code and configure the tool to connect to the protocol adapter.
 
 ## Configuration
 
