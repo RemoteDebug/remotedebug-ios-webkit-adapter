@@ -51,7 +51,6 @@ export class Adapter extends EventEmitter {
     }
 
     public start(): void {
-        Logger.log('adapter.start');
         if (this._options.proxyExePath) {
             // Start the Proxy
             this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs);
@@ -143,7 +142,7 @@ export class Adapter extends EventEmitter {
         // Overwrite the real endpoint with the url of our proxy multiplexor
         t.webSocketDebuggerUrl = `${this._proxyUrl}${this._id}/${t.id}`;
         let wsUrl = `${this._proxyUrl.replace('ws://', '')}${this._id}/${t.id}`;
-        t.devtoolsFrontendUrl = `https://chrome-devtools-frontend.appspot.com/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=true&ws=${wsUrl}`;
+        t.devtoolsFrontendUrl = `https://chrome-devtools-frontend.appspot.com/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=true&remoteFrontend=screencast&ws=${wsUrl}`;
 
         return t;
     }
@@ -160,6 +159,7 @@ export class Adapter extends EventEmitter {
                 stdio: ['ignore']
             });
             this._proxyProc.on('error', (err) => {
+                Logger.error(`Proxy launch failure. ${err}`);
                 this.stop();
             });
         }
