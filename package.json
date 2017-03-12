@@ -25,14 +25,14 @@
     "gulp": "^3.9.1",
     "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
-    "gulp-tslint": "^5.0.0",
-    "gulp-typescript": "^2.13.4",
+    "gulp-tslint": "^7.1.0",
+    "gulp-typescript": "^3.1.5",
     "mocha": "^2.5.3",
     "mockery": "^1.7.0",
     "mock-socket": "^3.0.1",
     "typemoq": "0.0.6",
-    "typescript": "2.0.10",
-    "tslint": "^3.10.2"
+    "typescript": "2.2.1",
+    "tslint": "^3.15.1"
   },
   "optionalDependencies": {
     "vs-libimobile": "^0.0.3"
