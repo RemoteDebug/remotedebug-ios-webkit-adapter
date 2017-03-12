@@ -1,8 +1,12 @@
 {
     "compilerOptions": {
         "module": "commonjs",
+        "target": "ES2016",
         "types": [
             "node"
         ]
-    }
+    },
+    "exclude": [
+        "src/**/*.json"
+    ]
 }
