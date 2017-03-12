@@ -7,6 +7,9 @@ import { Target } from '../target';
 import { Logger } from '../../logger';
 import { ScreencastSession } from './screencast';
 
+declare var document: any
+declare var MouseEvent: any
+
 interface IRange {
     startLine: number;
     startColumn: number;
@@ -459,7 +462,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onEmulateTouchFromMouseEvent(msg: any): Promise<any> {
-        /* tslint:disable:no-bitwise */
+        /* tslint:disable */
         function simulate(params: any) {
             const element = document.elementFromPoint(params.x, params.y);
             const e = new MouseEvent(params.type, {
@@ -479,7 +482,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             element.dispatchEvent(e);
             return element;
         }
-        /* tslint:enable:no-bitwise */
+        /* tslint:enable */
 
         switch (msg.params.type) {
             case 'mousePressed':
