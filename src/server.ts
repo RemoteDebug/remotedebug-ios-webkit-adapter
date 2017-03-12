@@ -21,6 +21,7 @@ export class ProxyServer extends EventEmitter {
     private _serverPort: number;
     private _adapter: Adapter;
     private _clients: Map<ws, string>;
+    private _targetFetcherInterval: NodeJS.Timer;
 
     constructor() {
         super();
@@ -55,6 +56,8 @@ export class ProxyServer extends EventEmitter {
         // this._adapter = new TestAdapter('/test', `ws://localhost:${port}`);
         this._adapter.start();
 
+        this.startTargetFetcher();
+
         return port;
     }
 
@@ -64,7 +67,28 @@ export class ProxyServer extends EventEmitter {
             this._hs = null;
         }
 
+        this.stopTargetFetcher();
         this._adapter.stop();
+    }
+
+    private startTargetFetcher(): void {
+
+        var fetch = () => {
+            this._adapter.getTargets().then((targets) => {
+                console.log('targetFetcher.fetched', targets.length)
+            }, (err) => {
+                console.error('targetFetcher.error', err)
+            })
+        }
+
+        this._targetFetcherInterval = setInterval(fetch, 5000)
+    }
+
+    private stopTargetFetcher(): void {
+        if (!this._targetFetcherInterval) {
+            return
+        }
+        clearInterval(this._targetFetcherInterval)
     }
 
     private setupHttpHandlers(): void {
