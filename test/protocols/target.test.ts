@@ -6,6 +6,7 @@
 
 import * as assert from 'assert';
 import * as mockery from 'mockery';
+import * as mocha from "mocha";
 import { Server, SocketIO } from 'mock-socket';
 import { LoggerMock } from '../helperMocks';
 import { Target } from '../../src/protocols/target';
@@ -224,11 +225,11 @@ suite('Proxy/Protocol/Target', () => {
             const target = CreateTarget();
 
             toolsServer.on('message', () => {
-                assert.fail('the adapter calling the target should not have sent a message to the tools');
+                assert.fail('the adapter calling the target should not have sent a message to the tools', '', '', '');
             });
 
             target.on('target::Debugger.Enable', () => {
-                assert.fail('the adapter calling the target should not have emitted an event, it should resolve the promise instead');
+                assert.fail('the adapter calling the target should not have emitted an event, it should resolve the promise instead', '', '', '');
             });
 
             Promise.all([targetReady, toolsReady]).then(() => {
@@ -268,7 +269,7 @@ suite('Proxy/Protocol/Target', () => {
                 });
 
                 target.callTarget('anything', null).then((result) => {
-                    assert.fail('promise should not have succeeded');
+                    assert.fail('promise should not have succeeded', '', '', '');
                 }, (error) => {
                     assert.deepEqual(error, expectedError, 'error should match what was returned from the target server');
                     done();
@@ -376,7 +377,7 @@ suite('Proxy/Protocol/Target', () => {
 
             Promise.all([targetReady, toolsReady, updatedToolsReady]).then(() => {
                 toolSocket.send = (msg) => {
-                    assert.fail('message should have been sent to the new server');
+                    assert.fail('message should have been sent to the new server', '', '', '');
                 };
 
                 updatedToolSocket.send = (msg) => {

@@ -16,7 +16,7 @@ import { IIOSProxySettings } from './adapters/adapterInterfaces';
 
 export class ProxyServer extends EventEmitter {
     private _hs: http.Server;
-    private _es: express;
+    private _es: express.Application;
     private _wss: WebSocketServer;
     private _serverPort: number;
     private _adapter: Adapter;
