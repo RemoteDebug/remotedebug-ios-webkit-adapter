@@ -21,8 +21,11 @@ All dependencies should be bundled. You should be good to go.
 Make sure you have Homebrew installed, and run the following command to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy) and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
 
 ```
-brew install libimobiledevice
-brew install ios-webkit-debug-proxy
+brew update
+brew unlink libimobiledevice ios-webkit-debug-proxy
+brew uninstall --force libimobiledevice ios-webkit-debug-proxy
+brew install --HEAD libimobiledevice
+brew install --HEAD ios-webkit-debug-proxy
 ```
 
 ### 2) Instal latest version of the adapter
