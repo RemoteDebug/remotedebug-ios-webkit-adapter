@@ -108,65 +108,55 @@ export class IOSAdapter extends AdapterCollection {
 
     public static async getProxySettings(args: any): Promise<IIOSProxySettings | string> {
         let settings: IIOSProxySettings = null;
-        let errorMessage: string = null;
 
         // Check that the proxy exists
         const proxyPath = args.proxyExecutable || await IOSAdapter.getProxyPath();
-        if (!proxyPath) {
-            if (os.platform() !== 'win32') {
-                errorMessage = `No iOS proxy was found. Install an iOS proxy (https://github.com/google/ios-webkit-debug-proxy) and specify a valid 'proxyExecutable' path`;
-            } else {
-                errorMessage = `No iOS proxy was found. Run 'npm install -g vs-libimobile' and specify a valid 'proxyExecutable' path`;
-            }
-        } else {
-            // Grab the specified device name, or default to * (which means first)
-            const optionalDeviceName = args.deviceName || '*';
 
-            // Start with remote debugging enabled
-            const proxyPort = args.proxyPort;
-            const proxyArgs = [];
+        // Grab the specified device name, or default to * (which means first)
+        const optionalDeviceName = args.deviceName || '*';
 
-            // Use default parameters for the ios_webkit_debug_proxy executable
-            if (!args.proxyExecutable) {
-                proxyArgs.push('--no-frontend');
+        // Start with remote debugging enabled
+        const proxyPort = args.proxyPort;
+        const proxyArgs = [];
 
-                // Set the ports available for devices
-                proxyArgs.push('--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101));
-            }
+        // Use default parameters for the ios_webkit_debug_proxy executable
+        if (!args.proxyExecutable) {
+            proxyArgs.push('--no-frontend');
 
-            if (args.proxyArgs) {
-                // Add additional parameters
-                proxyArgs.push(...args.proxyArgs);
-            }
-
-            settings = {
-                proxyPath: proxyPath,
-                optionalDeviceName: optionalDeviceName,
-                proxyPort: proxyPort,
-                proxyArgs: proxyArgs,
-                originalArgs: args
-            };
+            // Set the ports available for devices
+            proxyArgs.push('--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101));
         }
 
-        return errorMessage || settings;
+        if (args.proxyArgs) {
+            // Add additional parameters
+            proxyArgs.push(...args.proxyArgs);
+        }
+
+        settings = {
+            proxyPath: proxyPath,
+            optionalDeviceName: optionalDeviceName,
+            proxyPort: proxyPort,
+            proxyArgs: proxyArgs,
+            originalArgs: args
+        };
+      
+        return settings;
     }
 
     private static getProxyPath(): Promise<string> {
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
                 const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
-
                 try {
                     fs.statSync(proxy);
                     resolve(proxy)
                 } catch (err) {
-                    reject(err)
+                    reject(`ideviceinfo not found. Please install 'npm install -g vs-libimobile'`)
                 }
-
             } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
                 which('ios_webkit_debug_proxy', function (err, resolvedPath) {
                     if (err) {
-                        reject('ios_webkit_debug_proxy not found')
+                        reject('ios_webkit_debug_proxy not found. Please install ios_webkit_debug_proxy (https://github.com/google/ios-webkit-debug-proxy)')
                     } else {
                         resolve(resolvedPath)
                     }
@@ -179,18 +169,17 @@ export class IOSAdapter extends AdapterCollection {
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
                 const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ideviceinfo.exe');
-
                 try {
                     fs.statSync(proxy);
                     resolve(proxy);
                 } catch (e) {
-                    reject(e)
+                    reject(`ideviceinfo not found. Please install 'npm install -g vs-libimobile'`)
                 }
 
             } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
                 which('ideviceinfo', function (err, resolvedPath) {
                     if (err) {
-                        reject('ideviceinfo not found')
+                        reject('ideviceinfo not found. Please install libimobiledevice (https://github.com/libimobiledevice/libimobiledevice)')
                     } else {
                         resolve(resolvedPath)
                     }
