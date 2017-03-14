@@ -165,7 +165,6 @@ export class IOSAdapter extends AdapterCollection {
 
             } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
                 which('ios_webkit_debug_proxy', function (err, resolvedPath) {
-                    console.log('err, resolvedPath', err, resolvedPath)
                     if (err) {
                         reject('ios_webkit_debug_proxy not found')
                     } else {
