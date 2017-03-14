@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as WebSocket from 'ws';
 import * as which from 'which'
-import { execFile } from 'child_process';
+import { execFile } from 'child-process-promise';
 import { Logger } from '../logger';
 import { Adapter } from './adapter';
 import { Target } from '../protocols/target';
@@ -175,39 +175,41 @@ export class IOSAdapter extends AdapterCollection {
         })
     }
 
-    private static getDeviceInfoPath(): string {
+    private static getDeviceInfoPath(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            if (os.platform() === 'win32') {
+                const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ideviceinfo.exe');
 
-        if (os.platform() === 'win32') {
-            const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ideviceinfo.exe');
+                try {
+                    fs.statSync(proxy);
+                    resolve(proxy);
+                } catch (e) {
+                    reject(e)
+                }
 
-            try {
-                fs.statSync(proxy);
-                return proxy;
-            } catch (e) {
-                // Doesn't exist
+            } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
+                which('ideviceinfo', function (err, resolvedPath) {
+                    if (err) {
+                        reject('ideviceinfo not found')
+                    } else {
+                        resolve(resolvedPath)
+                    }
+                })
             }
+        })
+    }
 
-        } else if (os.platform() === 'darwin') {
-            return '/usr/local/bin/ideviceinfo';
-        } else if (os.platform() === 'linux') {
-            return '/usr/bin/ideviceinfo';
+    private async getDeviceVersion(uuid: string): Promise<string> {
+        const _iDeviceInfoPath = await IOSAdapter.getDeviceInfoPath();
+        var proc = await execFile(_iDeviceInfoPath, ['-u', `${uuid}`, '-k', 'ProductVersion'])
+
+        let deviceVersion = ''
+        if (!proc.err) {
+            deviceVersion = proc.stdout.trim();
         }
 
-        return null;
-    }
-
-    private getDeviceVersion(uuid: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const _iDeviceInfoPath = IOSAdapter.getDeviceInfoPath();
-            execFile(_iDeviceInfoPath, ['-u', `${uuid}`, '-k', 'ProductVersion'], (err, stdout, stderr) => {
-                let deviceVersion = '';
-                if (!err) {
-                    deviceVersion = stdout.trim();
-                }
-                resolve(deviceVersion);
-            });
-        });
-    }
+        return deviceVersion;
+    };
 
     private getProtocolFor(version: string, target: Target): IOSProtocol {
         const parts = version.split('.');
