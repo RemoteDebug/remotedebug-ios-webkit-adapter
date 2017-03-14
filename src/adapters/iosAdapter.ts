@@ -35,9 +35,7 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     public getTargets(): Promise<ITarget[]> {
-
         Logger.log('iosAdapter.getTargets');
-        Logger.log(this._url);
 
         return new Promise((resolve) => {
             request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
