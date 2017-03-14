@@ -146,7 +146,7 @@ export class IOSAdapter extends AdapterCollection {
     private static getProxyPath(): Promise<string> {
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
-                const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
+                const proxy = path.resolve(__dirname, '../../node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
                 try {
                     fs.statSync(proxy);
                     resolve(proxy)
@@ -168,7 +168,7 @@ export class IOSAdapter extends AdapterCollection {
     private static getDeviceInfoPath(): Promise<string> {
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
-                const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ideviceinfo.exe');
+                const proxy = path.resolve(__dirname, '../../node_modules/vs-libimobile/lib/ideviceinfo.exe');
                 try {
                     fs.statSync(proxy);
                     resolve(proxy);
