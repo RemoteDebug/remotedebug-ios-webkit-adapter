@@ -8,6 +8,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as WebSocket from 'ws';
+import * as which from 'which'
 import { execFile } from 'child_process';
 import { Logger } from '../logger';
 import { Adapter } from './adapter';
@@ -105,12 +106,12 @@ export class IOSAdapter extends AdapterCollection {
         return target;
     }
 
-    public static getProxySettings(args: any): IIOSProxySettings | string {
+    public static async getProxySettings(args: any): Promise<IIOSProxySettings | string> {
         let settings: IIOSProxySettings = null;
         let errorMessage: string = null;
 
         // Check that the proxy exists
-        const proxyPath = args.proxyExecutable || IOSAdapter.getProxyPath();
+        const proxyPath = args.proxyExecutable || await IOSAdapter.getProxyPath();
         if (!proxyPath) {
             if (os.platform() !== 'win32') {
                 errorMessage = `No iOS proxy was found. Install an iOS proxy (https://github.com/google/ios-webkit-debug-proxy) and specify a valid 'proxyExecutable' path`;
@@ -150,24 +151,29 @@ export class IOSAdapter extends AdapterCollection {
         return errorMessage || settings;
     }
 
-    private static getProxyPath(): string {
-        if (os.platform() === 'win32') {
-            const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
+    private static getProxyPath(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            if (os.platform() === 'win32') {
+                const proxy = path.resolve(__dirname, '../../../../node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
 
-            try {
-                fs.statSync(proxy);
-                return proxy;
-            } catch (e) {
-                // Doesn't exist
+                try {
+                    fs.statSync(proxy);
+                    resolve(proxy)
+                } catch (err) {
+                    reject(err)
+                }
+
+            } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
+                which('ios_webkit_debug_proxy', function (err, resolvedPath) {
+                    console.log('err, resolvedPath', err, resolvedPath)
+                    if (err) {
+                        reject('ios_webkit_debug_proxy not found')
+                    } else {
+                        resolve(resolvedPath)
+                    }
+                })
             }
-
-        } else if (os.platform() === 'darwin') {
-            return '/usr/local/bin/ios_webkit_debug_proxy';
-        } else if (os.platform() === 'linux') {
-            return '/usr/bin/ios_webkit_debug_proxy';
-        }
-
-        return null;
+        })
     }
 
     private static getDeviceInfoPath(): string {

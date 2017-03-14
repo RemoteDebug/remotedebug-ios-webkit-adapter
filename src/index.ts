@@ -23,9 +23,12 @@ if (argv.help) {
 }
 
 const server = new ProxyServer();
-const port = server.run(argv.port);
 
-console.log(`remotedebug-ios-webkit-adapter is listening on port ${port}`);
+server.run(argv.port).then(port => {
+  console.log(`remotedebug-ios-webkit-adapter is listening on port ${port}`);
+}).catch(err => {
+  console.error('remotedebug-ios-webkit-adapter failed to run', err)
+})
 
 process.on('SIGINT', function () {
   server.stop();

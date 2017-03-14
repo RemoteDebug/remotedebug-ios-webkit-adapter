@@ -29,7 +29,7 @@ export class ProxyServer extends EventEmitter {
         process.on('SIGTERM', () => this.stop());
     }
 
-    public run(serverPort: number): number {
+    public async run(serverPort: number): Promise<number> {
         this._serverPort = serverPort;
         this._clients = new Map<ws, string>();
 
@@ -46,7 +46,7 @@ export class ProxyServer extends EventEmitter {
         this._hs.listen(this._serverPort);
         const port = this._hs.address().port;
 
-        const settings = IOSAdapter.getProxySettings({
+        const settings = await IOSAdapter.getProxySettings({
             proxyPath: null,
             proxyPort: (port + 100),
             proxyArgs: null
