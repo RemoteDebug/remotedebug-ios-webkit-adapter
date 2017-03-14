@@ -4,7 +4,8 @@
         "target": "ES2016",
         "types": [
             "node"
-        ]
+        ],
+        "sourceMap": true
     },
     "exclude": [
         "src/**/*.json"
