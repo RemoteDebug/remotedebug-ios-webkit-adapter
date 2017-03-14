@@ -31,11 +31,9 @@ let isWatch = false
 
 gulp.task('build', function () {
   var tsProject = ts.createProject('tsconfig.json')
-
-  var tsResult = gulp.src(shellSources, { base: '' })
+  return gulp.src(shellSources, { base: '' })
     .pipe(tsProject())
-
-  tsResult.pipe(gulp.dest('./out'))
+    .pipe(gulp.dest('./out'))
 })
 
 gulp.task('build-tests', function () {
@@ -44,12 +42,9 @@ gulp.task('build-tests', function () {
     'test/*.ts'
   ]
 
-  const tsConfig = JSON.parse(fs.readFileSync('tsconfig.json', 'utf8'))
-  const projectConfig = tsConfig.compilerOptions
-  return gulp.src(sources, { base: '' })
-    .pipe(sourcemaps.init())
-    .pipe(ts(projectConfig)).js
-    .pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: __dirname + '/'}))
+  var tsProject = ts.createProject('tsconfig.json')
+  return gulp.src(shellSources, { base: '' })
+    .pipe(tsProject())
     .pipe(gulp.dest('./out/test'))
 })
 
