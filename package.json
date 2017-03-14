@@ -19,6 +19,7 @@
     "express": "^4.14.0",
     "optimist": "^0.6.1",
     "request": "^2.72.0",
+    "which": "^1.2.12",
     "ws": "^1.1.0"
   },
   "devDependencies": {
