@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RemoteDebug/remotedebug-ios-webkit-adapter.svg?branch=master)](https://travis-ci.org/RemoteDebug/remotedebug-ios-webkit-adapter) <a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
 
-RemoteDebug iOS WebKit Adapter is an protocol adapter that enables tools compatible with the [RemoteDebug Core Protocol Specification]() to work with Safari Mobile / WebKit instances running in iOS devices. 
+RemoteDebug iOS WebKit Adapter is an protocol adapter that enables tools compatible with the [RemoteDebug Inspector Core Protocol Specification](https://github.com/RemoteDebug/inspector-core-spec) to work with Safari Mobile / WebKit WebView winstances running in iOS devices. 
 
 ## Getting Started
 
