@@ -96,6 +96,11 @@ export class IOSAdapter extends AdapterCollection {
 
     public connectTo(url: string, wsFrom: WebSocket): Target {
         const target = super.connectTo(url, wsFrom);
+
+        if (!target) {
+            throw new Error(`Target not found for ${url}`)
+        }
+
         if (!this._protocolMap.has(target)) {
             const version = (target.data.metadata as IIOSDeviceTarget).version;
             const protocol = this.getProtocolFor(version, target);
@@ -137,7 +142,7 @@ export class IOSAdapter extends AdapterCollection {
             proxyArgs: proxyArgs,
             originalArgs: args
         };
-      
+
         return settings;
     }
 

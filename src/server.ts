@@ -140,7 +140,13 @@ export class ProxyServer extends EventEmitter {
 
         let connection = <EventEmitter>ws;
 
-        this._adapter.connectTo(url, ws);
+        try {
+            this._adapter.connectTo(url, ws);
+        }
+        catch (err) {
+            console.error('server.onWSSConnection.connectTo.error', err)
+        }
+
         connection.on('message', (msg) => {
             this._adapter.forwardTo(url, msg);
         });
