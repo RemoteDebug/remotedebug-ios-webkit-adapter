@@ -2,6 +2,8 @@
 // Copyright (C) Microsoft. All rights reserved.
 //
 
+import * as createDebug from 'debug'
+
 class LoggerUtil {
 
     constructor() {
@@ -16,4 +18,5 @@ class LoggerUtil {
     }
 }
 
+export const debug = createDebug('remotedebug')
 export const Logger = new LoggerUtil();

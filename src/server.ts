@@ -7,7 +7,7 @@ import * as express from 'express';
 import * as ws from 'ws';
 import { Server as WebSocketServer } from 'ws';
 import { EventEmitter } from 'events';
-import { Logger } from './logger';
+import { Logger, debug } from './logger';
 
 import { Adapter } from './adapters/adapter';
 import { IOSAdapter } from './adapters/iosAdapter';
@@ -32,6 +32,8 @@ export class ProxyServer extends EventEmitter {
     public async run(serverPort: number): Promise<number> {
         this._serverPort = serverPort;
         this._clients = new Map<ws, string>();
+
+        debug('server.run, port=%s', serverPort)
 
         this._es = express();
         this._hs = http.createServer(this._es);
@@ -62,6 +64,9 @@ export class ProxyServer extends EventEmitter {
     }
 
     public stop(): void {
+
+        debug('server.stop')
+
         if (this._hs) {
             this._hs.close();
             this._hs = null;
@@ -72,6 +77,8 @@ export class ProxyServer extends EventEmitter {
     }
 
     private startTargetFetcher(): void {
+
+        debug('server.startTargetFetcher')
 
         var fetch = () => {
             this._adapter.getTargets().then((targets) => {
@@ -85,6 +92,7 @@ export class ProxyServer extends EventEmitter {
     }
 
     private stopTargetFetcher(): void {
+        debug('server.stopTargetFetcher')
         if (!this._targetFetcherInterval) {
             return
         }
@@ -92,8 +100,10 @@ export class ProxyServer extends EventEmitter {
     }
 
     private setupHttpHandlers(): void {
+        debug('server.setupHttpHandlers')
 
         this._es.get('/', (req, res) => {
+            debug('server.http.endpoint/')
             res.json({
                 msg: 'Hello from RemoteDebug iOS WebKit Adapter'
             });
@@ -108,18 +118,21 @@ export class ProxyServer extends EventEmitter {
         });
 
         this._es.get('/json', (req, res) => {
+            debug('server.http.endpoint/json')
             this._adapter.getTargets().then((targets) => {
                 res.json(targets);
             });
         });
 
         this._es.get('/json/list', (req, res) => {
+            debug('server.http.endpoint/json/list')
             this._adapter.getTargets().then((targets) => {
                 res.json(targets);
             });
         });
 
         this._es.get('/json/version', (req, res) => {
+            debug('server.http.endpoint/json/version')
             res.json({
                 'Browser': 'Safari/RemoteDebug iOS Webkit Adapter',
                 'Protocol-Version': '1.2',
@@ -129,6 +142,7 @@ export class ProxyServer extends EventEmitter {
         });
 
         this._es.get('/json/protocol', (req, res) => {
+            debug('server.http.endpoint/json/protocol')
             res.json();
         });
 
@@ -136,6 +150,9 @@ export class ProxyServer extends EventEmitter {
 
     private onWSSConnection(ws: ws): void {
         const url = ws.upgradeReq.url;
+
+        debug('server.ws.onWSSConnection', url)
+
         Logger.log(`New websocket connection to ${url}`);
 
         let connection = <EventEmitter>ws;

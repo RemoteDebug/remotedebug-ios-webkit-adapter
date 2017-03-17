@@ -10,7 +10,7 @@ import * as os from 'os';
 import * as WebSocket from 'ws';
 import * as which from 'which'
 import { execFile } from 'child-process-promise';
-import { Logger } from '../logger';
+import { Logger, debug } from '../logger';
 import { Adapter } from './adapter';
 import { Target } from '../protocols/target';
 import { AdapterCollection } from './adapterCollection';
@@ -35,6 +35,7 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     public getTargets(): Promise<ITarget[]> {
+        debug(`iOSAdapter.getTargets`)
         Logger.log('iosAdapter.getTargets');
 
         return new Promise((resolve) => {
@@ -110,6 +111,7 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     public static async getProxySettings(args: any): Promise<IIOSProxySettings | string> {
+        debug(`iOSAdapter.getProxySettings`)
         let settings: IIOSProxySettings = null;
 
         // Check that the proxy exists
@@ -147,6 +149,7 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     private static getProxyPath(): Promise<string> {
+        debug(`iOSAdapter.getProxyPath`)
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
                 const proxy = path.resolve(__dirname, '../../node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
@@ -169,6 +172,7 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     private static getDeviceInfoPath(): Promise<string> {
+        debug(`iOSAdapter.getDeviceInfoPath`)
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
                 const proxy = path.resolve(__dirname, '../../node_modules/vs-libimobile/lib/ideviceinfo.exe');
@@ -192,6 +196,7 @@ export class IOSAdapter extends AdapterCollection {
     }
 
     private async getDeviceVersion(uuid: string): Promise<string> {
+        debug(`iOSAdapter.getDeviceVersion`)
         const _iDeviceInfoPath = await IOSAdapter.getDeviceInfoPath();
         var proc = await execFile(_iDeviceInfoPath, ['-u', `${uuid}`, '-k', 'ProductVersion'])
 
@@ -204,6 +209,7 @@ export class IOSAdapter extends AdapterCollection {
     };
 
     private getProtocolFor(version: string, target: Target): IOSProtocol {
+        debug(`iOSAdapter.getProtocolFor`)
         const parts = version.split('.');
         if (parts.length > 0) {
             const major = parseInt(parts[0], 10);

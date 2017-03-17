@@ -9,7 +9,7 @@ import { EventEmitter } from 'events';
 import { spawn, ChildProcess } from 'child_process';
 import { ITarget, IAdapterOptions } from './adapterInterfaces';
 import { Target } from '../protocols/target';
-import { Logger } from '../logger';
+import { Logger, debug } from '../logger';
 
 export class Adapter extends EventEmitter {
     protected _id: string;
@@ -47,10 +47,12 @@ export class Adapter extends EventEmitter {
     }
 
     public get id(): string {
+        debug(`adapter.id`)
         return this._id;
     }
 
     public start(): void {
+        debug(`adapter.start`)
         if (this._options.proxyExePath) {
             // Start the Proxy
             this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs);
@@ -58,6 +60,7 @@ export class Adapter extends EventEmitter {
     }
 
     public stop(): void {
+        debug(`adapter.stop`)
         if (this._proxyProc) {
             // Terminate the proxy process
             this._proxyProc.kill('SIGTERM');
@@ -66,6 +69,7 @@ export class Adapter extends EventEmitter {
     }
 
     public getTargets(metadata?: any): Promise<ITarget[]> {
+        debug(`adapter.getTargets, metadata=${metadata}`)
         return new Promise((resolve, reject) => {
             request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
                 if (error) {
@@ -85,6 +89,7 @@ export class Adapter extends EventEmitter {
     }
 
     public connectTo(targetId: string, wsFrom: WebSocket): Target {
+        debug(`adapter.connectTo, targetId=${targetId}`)
         if (!this._targetIdToTargetDataMap.has(targetId)) {
             Logger.error(`No endpoint url found for id ${targetId}`);
             return null;
@@ -109,6 +114,7 @@ export class Adapter extends EventEmitter {
     }
 
     public forwardTo(targetId: string, message: string): void {
+        debug(`adapter.forwardTo, targetId=${targetId}`)
         if (!this._targetMap.has(targetId)) {
             Logger.error(`No target found for id ${targetId}`);
             return;
@@ -118,12 +124,15 @@ export class Adapter extends EventEmitter {
     }
 
     public forceRefresh() {
+        debug('adapter.forceRefresh')
         if (this._proxyProc && this._options.proxyExePath && this._options.proxyExeArgs) {
             this.refereshProcess(this._proxyProc, this._options.proxyExePath, this._options.proxyExeArgs);
         }
     }
 
     protected setTargetInfo(t: ITarget, metadata?: any): ITarget {
+        debug('adapter.setTargetInfo', t, metadata)
+
         // Ensure there is a valid id
         const id: string = (t.id || t.appId);
         t.id = id;
@@ -148,11 +157,13 @@ export class Adapter extends EventEmitter {
     }
 
     protected refereshProcess(process: ChildProcess, path: string, args: string[]) {
+        debug('adapter.refereshProcess')
         process.kill('SIGTERM');
         this.spawnProcess(path, args);
     }
 
     protected spawnProcess(path: string, args: string[]): ChildProcess {
+        debug('adapter.spawnProcess')
         if (!this._proxyProc) {
             this._proxyProc = spawn(path, args, {
                 detached: true,

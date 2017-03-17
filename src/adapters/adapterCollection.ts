@@ -6,6 +6,7 @@ import * as WebSocket from 'ws';
 import { ITarget, IAdapterOptions } from './adapterInterfaces';
 import { Adapter } from './adapter';
 import { Target } from '../protocols/target';
+import { debug } from '../logger';
 
 export class AdapterCollection extends Adapter {
     protected _adapters: Map<string, Adapter>;
@@ -17,6 +18,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public start(): void {
+        debug(`adapterCollection.start`)
         super.start();
         this._adapters.forEach((adapter) => {
             adapter.start();
@@ -24,6 +26,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public stop(): void {
+        debug(`adapterCollection.stop`)
         super.stop();
         this._adapters.forEach((adapter) => {
             adapter.stop();
@@ -31,6 +34,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public forceRefresh(): void {
+        debug(`adapterCollection.forceRefresh`)
         super.forceRefresh();
         this._adapters.forEach((adapter) => {
             adapter.forceRefresh();
@@ -62,6 +66,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public connectTo(url: string, wsFrom: WebSocket): Target {
+        debug(`adapterCollection.connectTo, url=${url}`)
         const id = this.getWebSocketId(url);
 
         let target: Target = null;
@@ -73,6 +78,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public forwardTo(url: string, message: string): void {
+        debug(`adapterCollection.forwardTo, url=${url}`)
         const id = this.getWebSocketId(url);
 
         if (this._adapters.has(id.adapterId)) {
@@ -81,6 +87,7 @@ export class AdapterCollection extends Adapter {
     }
 
     private getWebSocketId(url: string): { adapterId: string, targetId: string } {
+        debug(`adapterCollection.getWebSocketId, url=${url}`)
         const index = url.indexOf('/', 1);
         const adapterId = url.substr(0, index);
         const targetId = url.substr(index + 1);
