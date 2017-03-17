@@ -113,5 +113,11 @@ npm install
 npm start
 ```
 
+## Diganostics logging
+
+```
+DEBUG=remotedebug npm start
+```
+
 ### License
 MIT
