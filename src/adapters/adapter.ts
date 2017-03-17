@@ -169,10 +169,23 @@ export class Adapter extends EventEmitter {
                 detached: true,
                 stdio: ['ignore']
             });
-            this._proxyProc.on('error', (err) => {
-                Logger.error(`Proxy launch failure. ${err}`);
+
+            this._proxyProc.stderr.setEncoding('utf8');
+            this._proxyProc.stdout.setEncoding('utf8');
+
+            this._proxyProc.stdout.on('error', err => {
+                debug(`adapter.spawnProcess.error, err=${err}`)
                 this.stop();
             });
+
+            this._proxyProc.stdout.on('data', data => {
+                debug(`adapter.spawnProcess.stdout, data=${data}`)
+            });
+
+            this._proxyProc.stderr.on('data', data => {
+                debug(`adapter.spawnProcess.stderr, data=${data}`)
+            });
+
         }
 
         return this._proxyProc;
