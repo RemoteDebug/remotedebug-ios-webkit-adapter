@@ -34,8 +34,6 @@ export interface IIOSDeviceTarget {
 
 export interface IIOSProxySettings {
     proxyPath: string;
-    optionalDeviceName: string;
     proxyPort: number;
     proxyArgs: string[];
-    originalArgs: any;
 }

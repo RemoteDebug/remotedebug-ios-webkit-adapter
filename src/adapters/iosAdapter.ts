@@ -115,34 +115,20 @@ export class IOSAdapter extends AdapterCollection {
         let settings: IIOSProxySettings = null;
 
         // Check that the proxy exists
-        const proxyPath = args.proxyExecutable || await IOSAdapter.getProxyPath();
-
-        // Grab the specified device name, or default to * (which means first)
-        const optionalDeviceName = args.deviceName || '*';
+        const proxyPath = await IOSAdapter.getProxyPath();
 
         // Start with remote debugging enabled
-        const proxyPort = args.proxyPort;
-        const proxyArgs = [];
-
         // Use default parameters for the ios_webkit_debug_proxy executable
-        if (!args.proxyExecutable) {
-            proxyArgs.push('--no-frontend');
-
-            // Set the ports available for devices
-            proxyArgs.push('--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101));
-        }
-
-        if (args.proxyArgs) {
-            // Add additional parameters
-            proxyArgs.push(...args.proxyArgs);
-        }
+        const proxyPort = args.proxyPort;
+        const proxyArgs = [
+            '--no-frontend',
+            '--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101)
+        ];
 
         settings = {
             proxyPath: proxyPath,
-            optionalDeviceName: optionalDeviceName,
             proxyPort: proxyPort,
-            proxyArgs: proxyArgs,
-            originalArgs: args
+            proxyArgs: proxyArgs
         };
 
         return settings;
