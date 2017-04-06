@@ -36,7 +36,7 @@
     "mockery": "^1.7.0",
     "tslint": "^3.15.1",
     "typemoq": "0.0.6",
-    "typescript": "2.2.1"
+    "typescript": "2.2.2"
   },
   "optionalDependencies": {
     "vs-libimobile": "^0.0.3"
