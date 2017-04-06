@@ -8,6 +8,7 @@
         "sourceMap": true
     },
     "exclude": [
-        "src/**/*.json"
+        "src/**/*.json",
+        "node_modules"
     ]
 }
