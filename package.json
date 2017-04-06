@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@types/express": "^4.0.34",
+    "@types/mocha": "^2.2.40",
     "@types/optimist": "0.0.29",
     "child-process-promise": "^2.2.0",
     "express": "^4.14.0",
