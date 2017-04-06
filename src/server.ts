@@ -25,8 +25,6 @@ export class ProxyServer extends EventEmitter {
 
     constructor() {
         super();
-        process.on('SIGINT', () => this.stop());
-        process.on('SIGTERM', () => this.stop());
     }
 
     public async run(serverPort: number): Promise<number> {
@@ -161,7 +159,7 @@ export class ProxyServer extends EventEmitter {
             this._adapter.connectTo(url, ws);
         }
         catch (err) {
-            console.error('server.onWSSConnection.connectTo.error', err)
+            debug(`server.onWSSConnection.connectTo.error.${err}`)
         }
 
         connection.on('message', (msg) => {
