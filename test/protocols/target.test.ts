@@ -58,7 +58,7 @@ suite('Proxy/Protocol/Target', () => {
         // SocketIO has most of them minus the OPEN/CLOSED boolean. We only care about OPEN so lets just add this functionality on here.
         SocketIO.OPEN = 1;
 
-        loggerMock = Mock.ofType(LoggerMock, MockBehavior.Loose);
+        loggerMock = Mock.ofType(new LoggerMock(), MockBehavior.Loose);
         mockery.registerMock('../../shell/logger', { Logger: loggerMock.object });
 
         targetServer = new Server(targetUrl);
