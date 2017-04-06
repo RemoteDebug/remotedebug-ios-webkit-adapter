@@ -28,6 +28,7 @@ server.run(argv.port).then(port => {
   console.log(`remotedebug-ios-webkit-adapter is listening on port ${port}`);
 }).catch(err => {
   console.error('remotedebug-ios-webkit-adapter failed to run with the following error:', err)
+  process.exit();
 })
 
 process.on('SIGINT', function () {
