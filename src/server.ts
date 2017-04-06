@@ -82,9 +82,9 @@ export class ProxyServer extends EventEmitter {
 
         var fetch = () => {
             this._adapter.getTargets().then((targets) => {
-                console.log('targetFetcher.fetched', targets.length)
+                debug(`server.startTargetFetcher.fetched.${targets.length}`)
             }, (err) => {
-                console.error('targetFetcher.error', err)
+                debug(`server.startTargetFetcher.error`, err``)
             })
         }
 
