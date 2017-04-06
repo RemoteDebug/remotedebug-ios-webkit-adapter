@@ -143,7 +143,7 @@ export class IOSAdapter extends AdapterCollection {
                     fs.statSync(proxy);
                     resolve(proxy)
                 } catch (err) {
-                    reject(`ideviceinfo not found. Please install 'npm install -g vs-libimobile'`)
+                    reject(`ios_webkit_debug_proxy.exe not found. Please install 'npm install -g vs-libimobile'`)
                 }
             } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
                 which('ios_webkit_debug_proxy', function (err, resolvedPath) {
