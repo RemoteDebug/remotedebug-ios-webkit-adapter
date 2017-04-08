@@ -19,7 +19,9 @@ Before you use this adapter you need to make sure you have the [latest version o
 Follow the instructions to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy#installation)  and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
 
 #### Windows
-All dependencies should be bundled. You should be good to go.
+All dependencies should be bundled. You should be good to go. 
+
+**iOS 10 on Windows**: Please be aware that iOS10 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) is out of date.
 
 #### OSX/Mac
 Make sure you have Homebrew installed, and run the following command to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy) and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
@@ -95,44 +97,9 @@ Install [VS Code](https:/code.visualstudio.com), and the [VS Code Chrome Debugge
 ```
 
 ## Architecture
-The protocol adapter is implemented in TypeScript as Node-based CLI tool which starts an instance of ios-webkit-debug-proxy, detects the connected iOS devices, and then starts up an instance of the correct protocol adapter depending on the iOS version.
+The protocol adapter is implemented in TypeScript as Node-based CLI tool which starts an instance of [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy), detects the connected iOS devices, and then starts up an instance of the correct protocol adapter depending on the iOS version.
 
 ![](.readme/architecture.png)
-
-### Implemented methods
-
-| Domain.method                              |
-|--------------------------------------------|
-| CSS.setStyleTexts                          |
-| CSS.getMatchedStylesForNode                |
-| CSS.addRule                                |
-| CSS.getMatchedStylesForNode                |
-| Page.startScreencast                       |
-| Page.stopScreencast                        |
-| Page.screencastFrameAck                    |
-| Page.getNavigationHistory                  |
-| Page.setOverlayMessage                     |
-|                                            |
-| DOM.enable                                 |
-| DOM.setInspectMode                         |
-| DOM.setInspectedNode                       |
-| DOM.pushNodesByBackendIdsToFrontend        |
-| DOM.getBoxModel                            |
-| DOM.getNodeForLocation                     |
-|                                            |
-| DOMDebugger.getEventListeners              |
-|                                            |
-| Emulation.setTouchEmulationEnabled         |
-| Emulation.setScriptExecutionDisabled       |
-| Emulation.setEmulatedMedia                 |
-|                                            |
-| Rendering.setShowPaintRects                |
-|                                            |
-| Input.emulateTouchFromMouseEvent           |
-|                                            |
-| Network.getCookies                         |
-| Network.deleteCookie                       |
-| Network.setMonitoringXHREnabled            |
 
 ## How to contribute
 
