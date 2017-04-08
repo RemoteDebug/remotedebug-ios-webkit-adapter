@@ -71,6 +71,24 @@ You can have your iOS targets show up in Mozila debugger.html, by starting `remo
 
 ## Using with Microsoft VS Code
 
+Install [VS Code](https:/code.visualstudio.com), and the [VS Code Chrome Debugger](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome), then create a `launch.json` configuration where `port` is set to 9000, like below:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "iOS Web",
+            "type": "chrome",
+            "request": "attach",
+            "port:": 9000,
+            "url": "http://localhost:8080/*",
+            "webRoot": "${workspaceRoot}/src"
+        }
+    ]
+}
+```
+
 ## Implemented methods
 
 | Domain.method                              |
