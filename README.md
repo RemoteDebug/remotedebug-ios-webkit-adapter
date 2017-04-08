@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/RemoteDebug/remotedebug-ios-webkit-adapter.svg?branch=master)](https://travis-ci.org/RemoteDebug/remotedebug-ios-webkit-adapter) <a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
 
-RemoteDebug iOS WebKit Adapter is an protocol adapter that enables tools compatible with the [RemoteDebug Inspector Core Protocol Specification](https://github.com/RemoteDebug/inspector-core-spec) to work with Safari Mobile / WebKit WebView winstances running in iOS devices. 
+RemoteDebug iOS WebKit Adapter is an protocol adapter that Safari and WebViews on iOS to be debugged from tools like VS Code, Chrome DevTools, Mozilla Debugger.html and other tools compatible with the Chrome Debugging Protocol.
+
+![](.readme/overview.png)
 
 ## Getting Started
 
@@ -57,19 +59,20 @@ Options:
 
 ```
 
-## Usage with Chrome (Canary) and Chrome DevTools
+## Usage
+### Usage with Chrome (Canary) and Chrome DevTools
 
 You can have your iOS targets show up in Chrome's `chrome://inspect` page by leveraging the new network discoverbility feature where you simple add the IP of computer running the adapter ala `localhost:9000`.
 
 ![](.readme/chrome_inspect.png)
 
-## Using with Mozilla debugger.html
+### Using with Mozilla debugger.html
 
 You can have your iOS targets show up in Mozila debugger.html, by starting `remotedebug_ios_webkit_adapter --port=9222` and selecting the Chrome tab.
 
 ![](.readme/debugger_html.png)
 
-## Using with Microsoft VS Code
+### Using with Microsoft VS Code
 
 Install [VS Code](https:/code.visualstudio.com), and the [VS Code Chrome Debugger](https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome), then create a `launch.json` configuration where `port` is set to 9000, like below:
 
@@ -89,7 +92,12 @@ Install [VS Code](https:/code.visualstudio.com), and the [VS Code Chrome Debugge
 }
 ```
 
-## Implemented methods
+## Architecture
+The protocol adapter is implemented in TypeScript as Node-based CLI tool which starts an instance of ios-webkit-debug-proxy, detects the connected iOS devices, and then starts up an instance of the correct protocol adapter depending on the iOS version.
+
+![](.readme/architecture.png)
+
+### Implemented methods
 
 | Domain.method                              |
 |--------------------------------------------|
