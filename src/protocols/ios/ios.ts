@@ -65,6 +65,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
         this._target.addMessageFilter('tools::Debugger.canSetScriptSource', (msg) => this.onCanSetScriptSource(msg));
         this._target.addMessageFilter('tools::Debugger.setBlackboxPatterns', (msg) => this.onSetBlackboxPatterns(msg));
+        this._target.addMessageFilter('tools::Debugger.setAsyncCallStackDepth', (msg) => this.onSetAsyncCallStackDepth(msg));
         this._target.addMessageFilter('target::Debugger.scriptParsed', (msg) => this.onScriptParsed(msg));
 
         this._target.addMessageFilter('tools::Emulation.canEmulate', (msg) => this.onCanEmulate(msg));
@@ -219,6 +220,15 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
     private onSetBlackboxPatterns(msg: any): Promise<any> {
         const result = {};
+
+        this._target.fireResultToTools(msg.id, result);
+        return Promise.resolve(null);
+    }
+
+    private onSetAsyncCallStackDepth(msg: any): Promise<any> {
+        const result = {
+            result: true
+        };
 
         this._target.fireResultToTools(msg.id, result);
         return Promise.resolve(null);
