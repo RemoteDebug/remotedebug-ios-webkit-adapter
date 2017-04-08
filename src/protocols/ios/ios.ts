@@ -66,6 +66,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Debugger.canSetScriptSource', (msg) => this.onCanSetScriptSource(msg));
         this._target.addMessageFilter('tools::Debugger.setBlackboxPatterns', (msg) => this.onSetBlackboxPatterns(msg));
         this._target.addMessageFilter('tools::Debugger.setAsyncCallStackDepth', (msg) => this.onSetAsyncCallStackDepth(msg));
+        this._target.addMessageFilter('tools::Debugger.enable', (msg) => this.onDebuggerEnable(msg));
         this._target.addMessageFilter('target::Debugger.scriptParsed', (msg) => this.onScriptParsed(msg));
 
         this._target.addMessageFilter('tools::Emulation.canEmulate', (msg) => this.onCanEmulate(msg));
@@ -232,6 +233,11 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
         this._target.fireResultToTools(msg.id, result);
         return Promise.resolve(null);
+    }
+
+    private onDebuggerEnable(msg: any): Promise<any> {
+        this._target.callTarget('Debugger.setBreakpointsActive', { active: true }) 
+        return Promise.resolve(msg);
     }
 
     private onGetMatchedStylesForNodeResult(msg: any): Promise<any> {
