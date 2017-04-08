@@ -4,7 +4,7 @@
 
 import * as WebSocket from 'ws';
 import { EventEmitter } from 'events';
-import { Logger } from '../logger';
+import { Logger, debug } from '../logger';
 import { ITarget } from '../adapters/adapterInterfaces';
 
 export class Target extends EventEmitter {
@@ -200,8 +200,6 @@ export class Target extends EventEmitter {
                 const resultPromise = this._adapterRequestMap.get(msg.id);
                 this._adapterRequestMap.delete(msg.id);
 
-                Logger.log(rawMessage);
-
                 if ('result' in msg) {
                     resultPromise.resolve(msg.result);
                 } else if ('error' in msg) {
@@ -237,7 +235,7 @@ export class Target extends EventEmitter {
     }
 
     private sendToTools(rawMessage: string): void {
-        Logger.log(rawMessage);
+        debug(`sendToTools.${rawMessage}`);
         // Make sure the tools socket can receive messages
         if (this.isSocketConnected(this._wsTools)) {
             this._wsTools.send(rawMessage);
@@ -245,7 +243,7 @@ export class Target extends EventEmitter {
     }
 
     private sendToTarget(rawMessage: string): void {
-        Logger.log(rawMessage);
+        debug(`sendToTarget.${rawMessage}`);
 
         // Make sure the target socket can receive messages
         if (this.isSocketConnected(this._wsTarget)) {
