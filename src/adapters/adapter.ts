@@ -52,10 +52,11 @@ export class Adapter extends EventEmitter {
     }
 
     public start(): Promise<any> {
-        debug(`adapter.start`)
+        debug(`adapter.start`, this._options)
 
         if (!this._options.proxyExePath) {
-            return Promise.reject('No proxyExePath avaiable')
+            debug(`adapter.start: Skip spawnProcess, no proxyExePath available`)
+            return Promise.resolve(`skipped`)
         }
         
         return this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs)
