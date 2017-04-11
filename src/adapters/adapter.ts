@@ -186,7 +186,7 @@ export class Adapter extends EventEmitter {
 
             this._proxyProc.on('close', (code) => {
                 debug(`adapter.spawnProcess.close, code=${code}`)
-                reject(`adapter.spawnProcess.close, err=${code}`)
+                reject(`adapter.spawnProcess.close, code=${code}`)
             });      
 
             this._proxyProc.stdout.on('data', data => {
