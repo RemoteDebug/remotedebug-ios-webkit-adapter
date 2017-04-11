@@ -17,12 +17,16 @@ export class AdapterCollection extends Adapter {
         this._adapters = new Map<string, Adapter>();
     }
 
-    public start(): void {
-        debug(`adapterCollection.start`)
-        super.start();
+    public start(): Promise<any> {
+        debug(`adapterCollection.start`, this._adapters)
+        
+        var startPromises = [super.start()];
+        
         this._adapters.forEach((adapter) => {
-            adapter.start();
-        });
+            startPromises.push(adapter.start());
+        })
+
+        return Promise.all(startPromises)
     }
 
     public stop(): void {

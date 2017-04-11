@@ -51,12 +51,15 @@ export class Adapter extends EventEmitter {
         return this._id;
     }
 
-    public start(): void {
+    public start(): Promise<any> {
         debug(`adapter.start`)
-        if (this._options.proxyExePath) {
-            // Start the Proxy
-            this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs);
+
+        if (!this._options.proxyExePath) {
+            return Promise.reject('No proxyExePath avaiable')
         }
+        
+        return this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs)
+
     }
 
     public stop(): void {
@@ -126,7 +129,7 @@ export class Adapter extends EventEmitter {
     public forceRefresh() {
         debug('adapter.forceRefresh')
         if (this._proxyProc && this._options.proxyExePath && this._options.proxyExeArgs) {
-            this.refereshProcess(this._proxyProc, this._options.proxyExePath, this._options.proxyExeArgs);
+            this.refreshProcess(this._proxyProc, this._options.proxyExePath, this._options.proxyExeArgs);
         }
     }
 
@@ -156,38 +159,47 @@ export class Adapter extends EventEmitter {
         return t;
     }
 
-    protected refereshProcess(process: ChildProcess, path: string, args: string[]) {
-        debug('adapter.refereshProcess')
+    protected refreshProcess(process: ChildProcess, path: string, args: string[]): Promise<ChildProcess> {
+        debug('adapter.refreshProcess')
         process.kill('SIGTERM');
-        this.spawnProcess(path, args);
+        return this.spawnProcess(path, args);
     }
 
-    protected spawnProcess(path: string, args: string[]): ChildProcess {
-        debug('adapter.spawnProcess')
-        if (!this._proxyProc) {
+    protected spawnProcess(path: string, args: string[]): Promise<ChildProcess> {
+        debug(`adapter.spawnProcess, path=${path}`, )
+
+        return new Promise((resolve, reject) => {
+            if (this._proxyProc) {
+                reject('adapter.spawnProcess.error, err=process already started')
+            }
+
             this._proxyProc = spawn(path, args, {
                 detached: true,
                 stdio: ['ignore']
             });
 
-            this._proxyProc.stderr.setEncoding('utf8');
-            this._proxyProc.stdout.setEncoding('utf8');
-
-            this._proxyProc.stdout.on('error', err => {
+            this._proxyProc.on('error', err => {
                 debug(`adapter.spawnProcess.error, err=${err}`)
-                this.stop();
+                reject(`adapter.spawnProcess.error, err=${err}`)
             });
 
+            this._proxyProc.on('close', (code) => {
+                debug(`adapter.spawnProcess.close, code=${code}`)
+                reject(`adapter.spawnProcess.close, err=${code}`)
+            });      
+
             this._proxyProc.stdout.on('data', data => {
-                debug(`adapter.spawnProcess.stdout, data=${data}`)
+                debug(`adapter.spawnProcess.stdout, data=${data.toString()}`)
             });
 
             this._proxyProc.stderr.on('data', data => {
-                debug(`adapter.spawnProcess.stderr, data=${data}`)
-            });
+                debug(`adapter.spawnProcess.stderr, data=${data.toString()}`)
+            });    
 
-        }
+            setTimeout(() => {
+                resolve(this._proxyProc);
+            }, 200);    
 
-        return this._proxyProc;
+        })
     }
 }

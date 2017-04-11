@@ -53,12 +53,13 @@ export class ProxyServer extends EventEmitter {
         });
 
         this._adapter = new IOSAdapter(`/ios`, `ws://localhost:${port}`, <IIOSProxySettings>settings);
-        // this._adapter = new TestAdapter('/test', `ws://localhost:${port}`);
-        this._adapter.start();
-
-        this.startTargetFetcher();
-
-        return port;
+        
+        return this._adapter.start().then(() => {
+            this.startTargetFetcher();
+        }).then(() => {
+            return port
+        })
+        
     }
 
     public stop(): void {
