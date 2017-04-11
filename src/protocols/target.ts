@@ -49,8 +49,9 @@ export class Target extends EventEmitter {
         // Create a connection to the real websocket endpoint
         this._wsTarget = new WebSocket(url);
         this._wsTarget.on('error', (err) => {
-            Logger.error(err.message);
+            Logger.error(err);
         });
+
         this._wsTarget.on('message', (message) => {
             this.onMessageFromTarget(message);
         });
