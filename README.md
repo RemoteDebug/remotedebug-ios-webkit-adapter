@@ -88,7 +88,7 @@ Install [VS Code](https:/code.visualstudio.com), and the [VS Code Chrome Debugge
             "name": "iOS Web",
             "type": "chrome",
             "request": "attach",
-            "port:": 9000,
+            "port": 9000,
             "url": "http://localhost:8080/*",
             "webRoot": "${workspaceRoot}/src"
         }
