@@ -61,6 +61,11 @@ export class IOSAdapter extends AdapterCollection {
                     getter = this.getDeviceVersion(d.deviceId).then(v => {
                         d.version = v;
                         return Promise.resolve(d);
+                    }).catch((err) => {
+                        // Device version detection failed, using fallback
+                        Logger.log('error.iosAdapter.getTargets.getDeviceVersion.failed.fallback', d);
+                        d.version = '9.3.0';
+                        return Promise.resolve(d);
                     });
                 }
 
