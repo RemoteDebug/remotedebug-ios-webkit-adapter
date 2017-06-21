@@ -31,6 +31,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     protected _isEvaluating: boolean;
     protected _lastScriptEval: string;
     protected _lastNodeId: number;
+    protected _lastPageExecutionContextId: number;
     protected _screencastSession: ScreencastSession;
 
     constructor(target: Target) {
@@ -81,6 +82,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Log.clear', (msg) => { msg.method = 'Console.clearMessages'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Log.disable', (msg) => { msg.method = 'Console.disable'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Log.enable', (msg) => { msg.method = 'Console.enable'; return Promise.resolve(msg); });
+        this._target.addMessageFilter('target::Console.messageAdded', (msg) => this.onConsoleMessageAdded(msg));
 
         this._target.addMessageFilter('tools::Network.getCookies', (msg) => { msg.method = 'Page.getCookies'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.deleteCookie', (msg) => { msg.method = 'Page.deleteCookie'; return Promise.resolve(msg); });
@@ -268,12 +270,17 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             if (!msg.params.context.origin) {
                 msg.params.context.origin = msg.params.context.name;
             }
+
+            if(msg.params.context.isPageContext) {
+                this._lastPageExecutionContextId = msg.params.context.id
+            }
         }
         return Promise.resolve(msg);
     }
 
     private onEvaluate(msg: any): Promise<any> {
-        if (msg.result.wasThrown) {
+
+        if (msg.result && msg.result.wasThrown) {
             msg.result.result.subtype = 'error';
             msg.result.exceptionDetails = {
                 text: msg.result.result.description,
@@ -531,6 +538,34 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             result: false
         };
         this._target.fireResultToTools(msg.id, result);
+        return Promise.resolve(null);
+    }
+
+    private onConsoleMessageAdded(msg: any): Promise<any> {
+        var type = '';
+        switch(msg.params.message.level ) {
+            case 'error':
+                type = 'error'
+                break;
+            case 'warning':
+                type = 'warning'
+                break;
+            default:
+                type = msg.params.message.type
+        }
+
+        var consoleMessage = { 
+            type: type,
+            args: msg.params.message.parameters,
+            executionContextId: this._lastPageExecutionContextId,
+            timestamp: (new Date).getTime(),
+            stackTrace: {
+                callFrames: msg.params.message.stackTrace
+            }
+        }
+
+        this._target.fireEventToTools('Runtime.consoleAPICalled', consoleMessage);
+        
         return Promise.resolve(null);
     }
 
