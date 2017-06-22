@@ -15,7 +15,7 @@ const fs = require('fs')
 const path = require('path')
 
 const shellSources = [
-  'src/**/*',
+  'src/**/*.ts',
   'test/**/*.ts',
   'test/*.ts',
   'typings/globals/**/*.ts',
