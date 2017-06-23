@@ -266,6 +266,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onExecutionContextCreated(msg: any): Promise<any> {
+
         if (msg.params && msg.params.context) {
             if (!msg.params.context.origin) {
                 msg.params.context.origin = msg.params.context.name;
@@ -274,7 +275,16 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             if(msg.params.context.isPageContext) {
                 this._lastPageExecutionContextId = msg.params.context.id
             }
+
+            if(msg.params.context.frameId) {
+                msg.params.context.auxData = {
+                    frameId: msg.params.context.frameId,
+                    isDefault: true
+            }
+                delete msg.params.context.frameId
         }
+        }
+
         return Promise.resolve(msg);
     }
 
