@@ -89,9 +89,10 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Network.setMonitoringXHREnabled', (msg) => { msg.method = 'Console.setMonitoringXHREnabled'; return Promise.resolve(msg); });
         this._target.addMessageFilter('tools::Network.canEmulateNetworkConditions', (msg) => this.onCanEmulateNetworkConditions(msg));
 
+        this._target.addMessageFilter('tools::Runtime.compileScript', (msg) => this.onRuntimeOnCompileScript(msg));
         this._target.addMessageFilter('target::Runtime.executionContextCreated', (msg) => this.onExecutionContextCreated(msg));
         this._target.addMessageFilter('target::Runtime.evaluate', (msg) => this.onEvaluate(msg));
-
+        
         this._target.addMessageFilter('target::Inspector.inspect', (msg) => this.onInspect(msg));
     }
 
@@ -280,9 +281,9 @@ export abstract class IOSProtocol extends ProtocolAdapter {
                 msg.params.context.auxData = {
                     frameId: msg.params.context.frameId,
                     isDefault: true
-            }
+                }
                 delete msg.params.context.frameId
-        }
+            }
         }
 
         return Promise.resolve(msg);
@@ -313,6 +314,11 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             msg.result.result.preview.type = 'object';
         }
 
+        return Promise.resolve(msg);
+    }
+
+    private onRuntimeOnCompileScript(msg: any): Promise<any> {
+        msg.method = 'Runtime.evaluate'
         return Promise.resolve(msg);
     }
 
