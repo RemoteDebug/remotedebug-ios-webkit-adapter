@@ -318,8 +318,20 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onRuntimeOnCompileScript(msg: any): Promise<any> {
-        msg.method = 'Runtime.evaluate'
-        return Promise.resolve(msg);
+        var params = {
+            expression: msg.params.expression,
+            contextId: msg.params.executionContextId
+        }
+
+        this._target.callTarget('Runtime.evaluate', params).then((obj) => {
+            var results = {
+                scriptId: null,
+                exceptionDetails: null
+            }
+            this._target.fireResultToTools(msg.id, results);
+        });
+
+        return Promise.resolve(null);
     }
 
     private onScriptParsed(msg: any): Promise<any> {
