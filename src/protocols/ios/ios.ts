@@ -92,7 +92,8 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('tools::Runtime.compileScript', (msg) => this.onRuntimeOnCompileScript(msg));
         this._target.addMessageFilter('target::Runtime.executionContextCreated', (msg) => this.onExecutionContextCreated(msg));
         this._target.addMessageFilter('target::Runtime.evaluate', (msg) => this.onEvaluate(msg));
-        
+        this._target.addMessageFilter('target::Runtime.getProperties', (msg) => this.onRuntimeGetProperties(msg));
+
         this._target.addMessageFilter('target::Inspector.inspect', (msg) => this.onInspect(msg));
     }
 
@@ -333,6 +334,22 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
         return Promise.resolve(null);
     }
+
+    private onRuntimeGetProperties(msg: any): Promise<any> {
+
+        var newPropertyDescriptors = [];
+
+        for(var i = 0; i < msg.result.result.length; i++) {
+            if(msg.result.result[i].isOwn || msg.result.result[i].nativeGetter) {
+                msg.result.result[i].isOwn = true;
+                newPropertyDescriptors.push(msg.result.result[i]);
+            }
+        }
+        msg.result.result = null;
+        msg.result.result = newPropertyDescriptors;
+
+        return Promise.resolve(msg);
+    }    
 
     private onScriptParsed(msg: any): Promise<any> {
         this._lastScriptEval = msg.params.scriptId;
