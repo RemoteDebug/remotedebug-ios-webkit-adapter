@@ -570,25 +570,26 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onConsoleMessageAdded(msg: any): Promise<any> {
-        var type = '';
-        switch(msg.params.message.level ) {
-            case 'error':
-                type = 'error'
-                break;
-            case 'warning':
-                type = 'warning'
-                break;
-            default:
-                type = msg.params.message.type
+        let message = msg.params.message;
+        let type;
+        if(message.type === "log") {
+            switch(message.level) {
+                    case "log": type = "log"; break;
+                    case "info": type = "info"; break;
+                    case "error": type = "error"; break;
+                    default: type = "log";
+            }
+        } else {
+            type = message.type;
         }
 
         var consoleMessage = { 
             type: type,
-            args: msg.params.message.parameters,
+            args: message.parameters || [],
             executionContextId: this._lastPageExecutionContextId,
             timestamp: (new Date).getTime(),
             stackTrace: {
-                callFrames: msg.params.message.stackTrace
+                callFrames: message.stackTrace
             }
         }
 
