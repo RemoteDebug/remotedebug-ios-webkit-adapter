@@ -648,26 +648,28 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             for (let i = 0; i < disabled.length; i++) {
                 const text = disabled[i].content.trim().replace(/^\/\*\s*/, '').replace(/;\s*\*\/$/, '');
                 const parts = text.split(':');
-
-                let index = cssStyle.cssProperties.length;
-                for (let j = 0; j < cssStyle.cssProperties.length; j++) {
-                    if (cssStyle.cssProperties[j].range &&
-                        (cssStyle.cssProperties[j].range.startLine > disabled[i].range.startLine ||
-                            (cssStyle.cssProperties[j].range.startLine === disabled[i].range.startLine &&
-                                cssStyle.cssProperties[j].range.startColumn > disabled[i].range.startColumn))) {
-                        index = j;
-                        break;
+                
+                if(cssStyle.cssProperties) {
+                    let index = cssStyle.cssProperties.length;
+                    for (let j = 0; j < cssStyle.cssProperties.length; j++) {
+                        if (cssStyle.cssProperties[j].range &&
+                            (cssStyle.cssProperties[j].range.startLine > disabled[i].range.startLine ||
+                                (cssStyle.cssProperties[j].range.startLine === disabled[i].range.startLine &&
+                                    cssStyle.cssProperties[j].range.startColumn > disabled[i].range.startColumn))) {
+                            index = j;
+                            break;
+                        }
                     }
-                }
 
-                cssStyle.cssProperties.splice(index, 0, {
-                    implicit: false,
-                    name: parts[0],
-                    range: disabled[i].range,
-                    status: 'disabled',
-                    text: disabled[i].content,
-                    value: parts[1]
-                });
+                    cssStyle.cssProperties.splice(index, 0, {
+                        implicit: false,
+                        name: parts[0],
+                        range: disabled[i].range,
+                        status: 'disabled',
+                        text: disabled[i].content,
+                        value: parts[1]
+                    });
+                }
             }
         }
 
