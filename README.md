@@ -66,6 +66,11 @@ Options:
 ## Usage
 ### Usage with Chrome (Canary) and Chrome DevTools
 
+In order for your iOS targets to show up in Chrome, you must:
+
+- Open iOS Safari preferences and enable "Web Inspector"
+- Use macOS Safari to inspect an iOS Safari tab. This will ensure the device is trusted.
+
 You can have your iOS targets show up in Chrome's `chrome://inspect` page by leveraging the new network discoverbility feature where you simple add the IP of computer running the adapter ala `localhost:9000`.
 
 ![](.readme/chrome_inspect.png)
