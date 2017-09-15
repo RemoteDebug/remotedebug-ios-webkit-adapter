@@ -21,7 +21,7 @@ Follow the instructions to install [ios-webkit-debug-proxy](https://github.com/g
 #### Windows
 All dependencies should be bundled. You should be good to go. 
 
-**iOS 10 on Windows**: Please be aware that iOS10 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) is out of date.
+**iOS 10 on Windows**: Please be aware that iOS10 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) may be out of date.
 
 #### OSX/Mac
 Make sure you have Homebrew installed, and run the following command to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy) and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
