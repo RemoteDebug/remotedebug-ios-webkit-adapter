@@ -39,6 +39,6 @@
     "typescript": "2.2.2"
   },
   "optionalDependencies": {
-    "vs-libimobile": "^0.0.3"
+    "vs-libimobile": "^0.0.5"
   }
 }
