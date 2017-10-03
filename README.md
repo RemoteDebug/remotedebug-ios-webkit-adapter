@@ -21,7 +21,7 @@ Follow the instructions to install [ios-webkit-debug-proxy](https://github.com/g
 #### Windows
 All dependencies should be bundled. You should be good to go. 
 
-**iOS 10 on Windows**: Please be aware that iOS10 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) may be out of date.
+**iOS 10 on Windows**: Please be aware that iOS11 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) may be out of date.
 
 #### OSX/Mac
 Make sure you have Homebrew installed, and run the following command to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy) and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
@@ -40,7 +40,18 @@ brew install --HEAD ios-webkit-debug-proxy
 npm install remotedebug-ios-webkit-adapter -g
 ```
 
-### 3) Run the adapter from your favorite command line
+### 3) Enable remote debugging in Safari
+In order for your iOS targets to show up, you need to enable remote debugging.
+
+Open iOS Settings => Safari preferences => enable "Web Inspector"
+
+### 4) Make your computer trust your iOS device.
+
+On MacOS you can use Safari to inspect an iOS Safari tab. This will ensure the device is trusted.
+
+On Windows starting iTunes could prompt the "Trust this computer" dialog.
+
+### 5) Run the adapter from your favorite command line
 
 ```
 remotedebug_ios_webkit_adapter --port=9000
@@ -48,7 +59,8 @@ remotedebug_ios_webkit_adapter --port=9000
 
 BTW: `ios-webkit-debug-proxy` will be run automatically for you, no need to start it separately.
 
-### 4) Open your favorite tool
+
+### 6) Open your favorite tool
 
 Open your favorite tool such as Chrome DevTools or Visual Studio Code and configure the tool to connect to the protocol adapter.
 
@@ -65,11 +77,6 @@ Options:
 
 ## Usage
 ### Usage with Chrome (Canary) and Chrome DevTools
-
-In order for your iOS targets to show up in Chrome, you must:
-
-- Open iOS Safari preferences and enable "Web Inspector"
-- Use macOS Safari to inspect an iOS Safari tab. This will ensure the device is trusted.
 
 You can have your iOS targets show up in Chrome's `chrome://inspect` page by leveraging the new network discoverbility feature where you simple add the IP of computer running the adapter ala `localhost:9000`.
 
