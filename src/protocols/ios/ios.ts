@@ -247,21 +247,23 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     private onGetMatchedStylesForNodeResult(msg: any): Promise<any> {
         const result = msg.result;
 
-        // Convert all the rules into the chrome format
-        for (let i in result.matchedCSSRules) {
-            if (result.matchedCSSRules[i].rule) {
-                this.mapRule(result.matchedCSSRules[i].rule);
-            }
-        }
+        if (result) {
+			// Convert all the rules into the chrome format
+			for (let i in result.matchedCSSRules) {
+				if (result.matchedCSSRules[i].rule) {
+					this.mapRule(result.matchedCSSRules[i].rule);
+				}
+			}
 
-        for (let i in result.inherited) {
-            if (result.inherited[i].matchedCSSRules) {
-                for (let j in result.inherited[i].matchedCSSRules) {
-                    if (result.inherited[i].matchedCSSRules[j].rule) {
-                        this.mapRule(result.inherited[i].matchedCSSRules[j].rule);
-                    }
-                }
-            }
+			for (let i in result.inherited) {
+				if (result.inherited[i].matchedCSSRules) {
+					for (let j in result.inherited[i].matchedCSSRules) {
+						if (result.inherited[i].matchedCSSRules[j].rule) {
+							this.mapRule(result.inherited[i].matchedCSSRules[j].rule);
+						}
+					}
+				}
+			}
         }
 
         return Promise.resolve(msg);
