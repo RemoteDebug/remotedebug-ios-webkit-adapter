@@ -138,7 +138,7 @@ export class Adapter extends EventEmitter {
         debug('adapter.setTargetInfo', t, metadata)
 
         // Ensure there is a valid id
-        const id: string = (t.id || t.appId);
+        const id: string = (t.id || t.webSocketDebuggerUrl);
         t.id = id;
 
         // Set the adapter type
