@@ -88,7 +88,7 @@ You can have your iOS targets show up in Chrome's `chrome://inspect` page by lev
 
 ### Using with Mozilla debugger.html
 
-You can have your iOS targets show up in Mozila debugger.html, by starting `remotedebug_ios_webkit_adapter --port=9222` and selecting the Chrome tab.
+You can have your iOS targets show up in [Mozila debugger.html](https://github.com/devtools-html/debugger.html), by starting `remotedebug_ios_webkit_adapter --port=9222` and selecting the Chrome tab.
 
 ![](.readme/debugger_html.png)
 
