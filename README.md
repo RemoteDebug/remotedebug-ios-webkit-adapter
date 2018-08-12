@@ -38,7 +38,7 @@ brew install --HEAD libimobiledevice
 brew install --HEAD ios-webkit-debug-proxy
 ```
 
-### 2) Instal latest version of the adapter
+### 2) Install latest version of the adapter
 
 ```
 npm install remotedebug-ios-webkit-adapter -g
