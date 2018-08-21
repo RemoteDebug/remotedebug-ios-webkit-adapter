@@ -23,9 +23,12 @@ All dependencies should be bundled. You should be good to go.
 
 **iOS 10 & 11 on Windows**: Please be aware that iOS11 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) may be out of date.
 
-**Windows 64-bit environments** require the following additional assets:
-1. Download the latest [Win64 release](https://github.com/google/ios-webkit-debug-proxy/releases/) ([v1.8](https://github.com/google/ios-webkit-debug-proxy/releases/download/v1.8/ios-webkit-debug-proxy-1.8-win64-bin.zip) at time of writing)
-2. Create a new folder named "x64" in `%AppData%\npm\node_modules\remotedebug-ios-webkit-adapter\node_modules\vs-libimobile\` (sibling to "lib") and extract the ios-webkit-debug-proxy-[ver]-win64-bin.zip archive there so that the architecture detection script in iosAdapter.js will resolve to `%AppData%\npm\node_modules\remotedebug-ios-webkit-adapter\node_modules\vs-libimobile\x64\ios_webkit_debug_proxy.exe` properly
+**Windows 64-bit environments**:
+Install the x64 version with [scoop](http://scoop.sh/)
+```
+scoop bucket add extras
+scoop install ios-webkit-debug-proxy
+```
 
 #### OSX/Mac
 Make sure you have Homebrew installed, and run the following command to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy) and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
