@@ -37,8 +37,5 @@
     "tslint": "^3.15.1",
     "typemoq": "0.0.6",
     "typescript": "2.2.2"
-  },
-  "optionalDependencies": {
-    "vs-libimobile": "^0.0.5"
   }
 }
