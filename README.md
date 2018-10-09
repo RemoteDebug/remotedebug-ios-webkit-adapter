@@ -19,16 +19,16 @@ Before you use this adapter you need to make sure you have the [latest version o
 Follow the instructions to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy#installation)  and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
 
 #### Windows
-All dependencies should be bundled. You should be good to go. 
 
-**iOS 10 & 11 on Windows**: Please be aware that iOS11 debugging might not work on Windows as the bundled version of [/ios-webkit- debug-proxy-win32](https://github.com/artygus/ios-webkit-debug-proxy-win32) may be out of date.
+Install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy#installation)  and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice). On Windows you can use [scoop](http://scoop.sh/):
 
-**Windows 64-bit environments**:
-Install the x64 version with [scoop](http://scoop.sh/)
 ```
 scoop bucket add extras
 scoop install ios-webkit-debug-proxy
+npm install -g vs-libimobile
 ```
+
+
 
 #### OSX/Mac
 Make sure you have Homebrew installed, and run the following command to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy) and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
