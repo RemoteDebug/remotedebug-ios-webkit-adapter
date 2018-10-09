@@ -143,13 +143,12 @@ export class IOSAdapter extends AdapterCollection {
         debug(`iOSAdapter.getProxyPath`)
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
-                const x64 = os.arch() === 'x64';
-                const proxy = x64 ? path.resolve(__dirname, process.env.USERPROFILE + '/scoop/apps/ios-webkit-debug-proxy/current/ios_webkit_debug_proxy.exe') : path.resolve(__dirname, process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/vs-libimobile/lib/ios_webkit_debug_proxy.exe');
+                const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/scoop/apps/ios-webkit-debug-proxy/current/ios_webkit_debug_proxy.exe');
                 try {
                     fs.statSync(proxy);
                     resolve(proxy)
                 } catch (err) {
-                    let message = x64 ? `ios_webkit_debug_proxy.exe not found. Please install 'scoop install ios-webkit-debug-proxy'` : `ios_webkit_debug_proxy.exe not found. Please install 'npm install -g vs-libimobile'`;
+                    let message = `ios_webkit_debug_proxy.exe not found. Please install 'scoop install ios-webkit-debug-proxy'`;
                     reject(message);
                 }
             } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
