@@ -39,15 +39,25 @@ export class IOSAdapter extends AdapterCollection {
         Logger.log('iosAdapter.getTargets');
 
         return new Promise((resolve) => {
-            request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
-                if (error) {
-                    resolve([]);
-                    return;
-                }
+            // request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
+            //     if (error) {
+            //         resolve([]);
+            //         return;
+            //     }
 
-                const devices: IIOSDeviceTarget[] = JSON.parse(body);
-                resolve(devices);
-            });
+            //     const devices: IIOSDeviceTarget[] = JSON.parse(body);
+            //     resolve(devices);
+            // });
+            const deviceId = '3fd3ef5648eeed4795e22ed002f6e6fcd2d32b3b';
+            const devices: IIOSDeviceTarget[] = [
+                {
+                    deviceId: deviceId,
+                    deviceName: deviceId,
+                    url: 'localhost:9322',
+                    version: ''
+                }
+            ];
+            resolve(devices);
         }).then((devices: IIOSDeviceTarget[]) => {
             // Now request the device version for each device found
             const deviceVersions: Promise<IIOSDeviceTarget>[] = [];

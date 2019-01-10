@@ -46,11 +46,22 @@ export class ProxyServer extends EventEmitter {
         this._hs.listen(this._serverPort);
         const port = this._hs.address().port;
 
-        const settings = await IOSAdapter.getProxySettings({
-            proxyPath: null,
-            proxyPort: (port + 100),
-            proxyArgs: null
-        });
+        // const settings = await IOSAdapter.getProxySettings({
+        //     proxyPath: null,
+        //     proxyPort: (port + 100),
+        //     proxyArgs: null
+        // });
+
+        const deviceId = '3fd3ef5648eeed4795e22ed002f6e6fcd2d32b3b';
+        const proxyPort = port + 100;
+        const settings = {
+            proxyPath: '/usr/local/bin/ios_webkit_debug_proxy',
+            proxyPort: proxyPort,
+            proxyArgs: [
+                '--no-frontend',
+                '--config=' + deviceId + ':' + proxyPort
+            ]
+        };
 
         this._adapter = new IOSAdapter(`/ios`, `ws://localhost:${port}`, <IIOSProxySettings>settings);
         
