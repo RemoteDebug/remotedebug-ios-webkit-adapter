@@ -11,7 +11,7 @@ import { Logger, debug } from './logger';
 
 import { Adapter } from './adapters/adapter';
 import { IOSAdapter } from './adapters/iosAdapter';
-import { IIOSProxySettings } from './adapters/adapterInterfaces';
+import { IIOSDeviceTarget, IIOSProxySettings } from './adapters/adapterInterfaces';
 // import { TestAdapter } from './adapters/testAdapter';
 
 export class ProxyServer extends EventEmitter {
@@ -51,9 +51,8 @@ export class ProxyServer extends EventEmitter {
         //     proxyPort: (port + 100),
         //     proxyArgs: null
         // });
-
+        const proxyPort = port + 100
         const deviceId = '3fd3ef5648eeed4795e22ed002f6e6fcd2d32b3b';
-        const proxyPort = port + 100;
         const settings = {
             proxyPath: '/usr/local/bin/ios_webkit_debug_proxy',
             proxyPort: proxyPort,
@@ -62,8 +61,14 @@ export class ProxyServer extends EventEmitter {
                 '--config=' + deviceId + ':' + proxyPort
             ]
         };
+        const deviceTarget = {
+            deviceId: deviceId,
+            deviceName: deviceId,
+            url: 'localhost:' + proxyPort,
+            version: ''
+        };
 
-        this._adapter = new IOSAdapter(`/ios`, `ws://localhost:${port}`, <IIOSProxySettings>settings);
+        this._adapter = new IOSAdapter(`/ios`, `ws://localhost:${port}`, <IIOSProxySettings>settings, <IIOSDeviceTarget> deviceTarget);
         
         return this._adapter.start().then(() => {
             this.startTargetFetcher();

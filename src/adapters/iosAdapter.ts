@@ -21,9 +21,10 @@ import { IOS9Protocol } from '../protocols/ios/ios9';
 
 export class IOSAdapter extends AdapterCollection {
     private _proxySettings: IIOSProxySettings;
+    private _deviceTarget: IIOSDeviceTarget;
     private _protocolMap: Map<Target, IOSProtocol>;
 
-    constructor(id: string, socket: string, proxySettings: IIOSProxySettings) {
+    constructor(id: string, socket: string, proxySettings: IIOSProxySettings, deviceTarget: IIOSDeviceTarget) {
         super(id, socket, {
             port: proxySettings.proxyPort,
             proxyExePath: proxySettings.proxyPath,
@@ -31,6 +32,7 @@ export class IOSAdapter extends AdapterCollection {
         });
 
         this._proxySettings = proxySettings;
+        this._deviceTarget = deviceTarget;
         this._protocolMap = new Map<Target, IOSProtocol>();
     }
 
@@ -48,16 +50,7 @@ export class IOSAdapter extends AdapterCollection {
             //     const devices: IIOSDeviceTarget[] = JSON.parse(body);
             //     resolve(devices);
             // });
-            const deviceId = '3fd3ef5648eeed4795e22ed002f6e6fcd2d32b3b';
-            const devices: IIOSDeviceTarget[] = [
-                {
-                    deviceId: deviceId,
-                    deviceName: deviceId,
-                    url: 'localhost:' + this._proxySettings.proxyPort,
-                    version: ''
-                }
-            ];
-            resolve(devices);
+            resolve([this._deviceTarget]);
         }).then((devices: IIOSDeviceTarget[]) => {
             // Now request the device version for each device found
             const deviceVersions: Promise<IIOSDeviceTarget>[] = [];
