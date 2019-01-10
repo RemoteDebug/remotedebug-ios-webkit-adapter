@@ -53,7 +53,7 @@ export class IOSAdapter extends AdapterCollection {
                 {
                     deviceId: deviceId,
                     deviceName: deviceId,
-                    url: 'localhost:9322',
+                    url: 'localhost:' + this._proxySettings.proxyPort,
                     version: ''
                 }
             ];
