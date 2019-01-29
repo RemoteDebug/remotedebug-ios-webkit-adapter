@@ -41,40 +41,40 @@ export class IOSAdapter extends AdapterCollection {
         Logger.log('iosAdapter.getTargets');
 
         return new Promise((resolve) => {
-            // request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
-            //     if (error) {
-            //         resolve([]);
-            //         return;
-            //     }
-
-            //     const devices: IIOSDeviceTarget[] = JSON.parse(body);
-            //     resolve(devices);
-            // });
             resolve([this._deviceTarget]);
-        }).then((devices: IIOSDeviceTarget[]) => {
-            // Now request the device version for each device found
-            const deviceVersions: Promise<IIOSDeviceTarget>[] = [];
-            devices.forEach(d => {
+        //     request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
+        //         if (error) {
+        //             resolve([]);
+        //             return;
+        //         }
 
-                let getter;
-                if (d.deviceId === 'SIMULATOR') {
-                    d.version = '9.3.0'; // TODO: Find a way to auto detect version. Currently hardcoding it.
-                    getter = Promise.resolve(d);
-                } else {
-                    getter = this.getDeviceVersion(d.deviceId).then(v => {
-                        d.version = v;
-                        return Promise.resolve(d);
-                    }).catch((err) => {
-                        // Device version detection failed, using fallback
-                        Logger.log(`error.iosAdapter.getTargets.getDeviceVersion.failed.fallback, device=${d}`);
-                        d.version = '9.3.0';
-                        return Promise.resolve(d);
-                    });
-                }
+        //         const devices: IIOSDeviceTarget[] = JSON.parse(body);
+        //         resolve(devices);
+        //     });
+        // }).then((devices: IIOSDeviceTarget[]) => {
+        //     // Now request the device version for each device found
+        //     const deviceVersions: Promise<IIOSDeviceTarget>[] = [];
+        //     devices.forEach(d => {
 
-                deviceVersions.push(getter);
-            });
-            return Promise.all(deviceVersions);
+        //         let getter;
+        //         if (d.deviceId === 'SIMULATOR') {
+        //             d.version = '9.3.0'; // TODO: Find a way to auto detect version. Currently hardcoding it.
+        //             getter = Promise.resolve(d);
+        //         } else {
+        //             getter = this.getDeviceVersion(d.deviceId).then(v => {
+        //                 d.version = v;
+        //                 return Promise.resolve(d);
+        //             }).catch((err) => {
+        //                 // Device version detection failed, using fallback
+        //                 Logger.log(`error.iosAdapter.getTargets.getDeviceVersion.failed.fallback, device=${d}`);
+        //                 d.version = '9.3.0';
+        //                 return Promise.resolve(d);
+        //             });
+        //         }
+
+        //         deviceVersions.push(getter);
+        //     });
+        //     return Promise.all(deviceVersions);
         }).then((devices: IIOSDeviceTarget[]) => {
             // Now start up all the adapters
             devices.forEach(d => {
@@ -118,90 +118,90 @@ export class IOSAdapter extends AdapterCollection {
         return target;
     }
 
-    public static async getProxySettings(args: any): Promise<IIOSProxySettings | string> {
-        debug(`iOSAdapter.getProxySettings`)
-        let settings: IIOSProxySettings = null;
+    // public static async getProxySettings(args: any): Promise<IIOSProxySettings | string> {
+    //     debug(`iOSAdapter.getProxySettings`)
+    //     let settings: IIOSProxySettings = null;
 
-        // Check that the proxy exists
-        const proxyPath = await IOSAdapter.getProxyPath();
+    //     // Check that the proxy exists
+    //     const proxyPath = await IOSAdapter.getProxyPath();
 
-        // Start with remote debugging enabled
-        // Use default parameters for the ios_webkit_debug_proxy executable
-        const proxyPort = args.proxyPort;
-        const proxyArgs = [
-            '--no-frontend',
-            '--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101)
-        ];
+    //     // Start with remote debugging enabled
+    //     // Use default parameters for the ios_webkit_debug_proxy executable
+    //     const proxyPort = args.proxyPort;
+    //     const proxyArgs = [
+    //         '--no-frontend',
+    //         '--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101)
+    //     ];
 
-        settings = {
-            proxyPath: proxyPath,
-            proxyPort: proxyPort,
-            proxyArgs: proxyArgs
-        };
+    //     settings = {
+    //         proxyPath: proxyPath,
+    //         proxyPort: proxyPort,
+    //         proxyArgs: proxyArgs
+    //     };
 
-        return settings;
-    }
+    //     return settings;
+    // }
 
-    private static getProxyPath(): Promise<string> {
-        debug(`iOSAdapter.getProxyPath`)
-        return new Promise((resolve, reject) => {
-            if (os.platform() === 'win32') {
-                const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/scoop/apps/ios-webkit-debug-proxy/current/ios_webkit_debug_proxy.exe');
-                try {
-                    fs.statSync(proxy);
-                    resolve(proxy)
-                } catch (err) {
-                    let message = `ios_webkit_debug_proxy.exe not found. Please install 'scoop install ios-webkit-debug-proxy'`;
-                    reject(message);
-                }
-            } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
-                which('ios_webkit_debug_proxy', function (err, resolvedPath) {
-                    if (err) {
-                        reject('ios_webkit_debug_proxy not found. Please install ios_webkit_debug_proxy (https://github.com/google/ios-webkit-debug-proxy)')
-                    } else {
-                        resolve(resolvedPath)
-                    }
-                })
-            }
-        })
-    }
+    // private static getProxyPath(): Promise<string> {
+    //     debug(`iOSAdapter.getProxyPath`)
+    //     return new Promise((resolve, reject) => {
+    //         if (os.platform() === 'win32') {
+    //             const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/scoop/apps/ios-webkit-debug-proxy/current/ios_webkit_debug_proxy.exe');
+    //             try {
+    //                 fs.statSync(proxy);
+    //                 resolve(proxy)
+    //             } catch (err) {
+    //                 let message = `ios_webkit_debug_proxy.exe not found. Please install 'scoop install ios-webkit-debug-proxy'`;
+    //                 reject(message);
+    //             }
+    //         } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
+    //             which('ios_webkit_debug_proxy', function (err, resolvedPath) {
+    //                 if (err) {
+    //                     reject('ios_webkit_debug_proxy not found. Please install ios_webkit_debug_proxy (https://github.com/google/ios-webkit-debug-proxy)')
+    //                 } else {
+    //                     resolve(resolvedPath)
+    //                 }
+    //             })
+    //         }
+    //     })
+    // }
 
-    private static getDeviceInfoPath(): Promise<string> {
-        debug(`iOSAdapter.getDeviceInfoPath`)
-        return new Promise((resolve, reject) => {
-            if (os.platform() === 'win32') {
-                const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/vs-libimobile/lib/ideviceinfo.exe');
-                try {
-                    fs.statSync(proxy);
-                    resolve(proxy);
-                } catch (e) {
-                    reject(`ideviceinfo not found. Please install 'npm install -g vs-libimobile'`)
-                }
+    // private static getDeviceInfoPath(): Promise<string> {
+    //     debug(`iOSAdapter.getDeviceInfoPath`)
+    //     return new Promise((resolve, reject) => {
+    //         if (os.platform() === 'win32') {
+    //             const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/vs-libimobile/lib/ideviceinfo.exe');
+    //             try {
+    //                 fs.statSync(proxy);
+    //                 resolve(proxy);
+    //             } catch (e) {
+    //                 reject(`ideviceinfo not found. Please install 'npm install -g vs-libimobile'`)
+    //             }
 
-            } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
-                which('ideviceinfo', function (err, resolvedPath) {
-                    if (err) {
-                        reject('ideviceinfo not found. Please install libimobiledevice (https://github.com/libimobiledevice/libimobiledevice)')
-                    } else {
-                        resolve(resolvedPath)
-                    }
-                })
-            }
-        })
-    }
+    //         } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
+    //             which('ideviceinfo', function (err, resolvedPath) {
+    //                 if (err) {
+    //                     reject('ideviceinfo not found. Please install libimobiledevice (https://github.com/libimobiledevice/libimobiledevice)')
+    //                 } else {
+    //                     resolve(resolvedPath)
+    //                 }
+    //             })
+    //         }
+    //     })
+    // }
 
-    private async getDeviceVersion(uuid: string): Promise<string> {
-        debug(`iOSAdapter.getDeviceVersion`)
-        const _iDeviceInfoPath = await IOSAdapter.getDeviceInfoPath();
-        var proc = await execFile(_iDeviceInfoPath, ['-u', `${uuid}`, '-k', 'ProductVersion'])
+    // private async getDeviceVersion(uuid: string): Promise<string> {
+    //     debug(`iOSAdapter.getDeviceVersion`)
+    //     const _iDeviceInfoPath = await IOSAdapter.getDeviceInfoPath();
+    //     var proc = await execFile(_iDeviceInfoPath, ['-u', `${uuid}`, '-k', 'ProductVersion'])
 
-        let deviceVersion = ''
-        if (!proc.err) {
-            deviceVersion = proc.stdout.trim();
-        }
+    //     let deviceVersion = ''
+    //     if (!proc.err) {
+    //         deviceVersion = proc.stdout.trim();
+    //     }
 
-        return deviceVersion;
-    };
+    //     return deviceVersion;
+    // };
 
     private getProtocolFor(version: string, target: Target): IOSProtocol {
         debug(`iOSAdapter.getProtocolFor`)
