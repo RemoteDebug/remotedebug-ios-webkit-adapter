@@ -607,9 +607,9 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             args: message.parameters || [],
             executionContextId: this._lastPageExecutionContextId,
             timestamp: (new Date).getTime(),
-            stackTrace: {
+            stackTrace: message.stackTrace ? {
                 callFrames: message.stackTrace
-            }
+            } : undefined
         }
 
         this._target.fireEventToTools('Runtime.consoleAPICalled', consoleMessage);
