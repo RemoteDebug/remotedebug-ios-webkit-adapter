@@ -37,8 +37,8 @@ Make sure you have Homebrew installed, and run the following command to install 
 brew update
 brew unlink libimobiledevice ios-webkit-debug-proxy usbmuxd
 brew uninstall --force libimobiledevice ios-webkit-debug-proxy usbmuxd
-brew install --HEAD libimobiledevice
 brew install --HEAD usbmuxd
+brew install --HEAD libimobiledevice
 brew install --HEAD ios-webkit-debug-proxy
 ```
 
