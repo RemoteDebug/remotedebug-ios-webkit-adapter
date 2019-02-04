@@ -748,7 +748,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             } else if (styleText.substr(index, IOSProtocol.END_COMMENT.length) === IOSProtocol.END_COMMENT) {
                 if (startIndices.length === 0) {
                     // Invalid state
-                    return null;
+                    return [];
                 }
 
                 const startIndex = startIndices.pop();
@@ -773,7 +773,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
         if (startIndices.length !== 0) {
             // Invalid state
-            return null;
+            return [];
         }
 
         return styles;
