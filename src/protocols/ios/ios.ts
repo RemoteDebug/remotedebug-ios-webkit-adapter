@@ -602,18 +602,23 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             type = message.type;
         }
 
-        var consoleMessage = { 
-            type: type,
-            args: message.parameters || [],
-            executionContextId: this._lastPageExecutionContextId,
+        const consoleMessage = {
+            source: message.source,
+            level: type,
+            text: message.text,
+            lineNumber: message.line,
             timestamp: (new Date).getTime(),
+            url: message.url,
             stackTrace: message.stackTrace ? {
                 callFrames: message.stackTrace
-            } : undefined
-        }
+            } : undefined,
+            networkRequestId: message.networkRequestId,
+        };
 
-        this._target.fireEventToTools('Runtime.consoleAPICalled', consoleMessage);
-        
+        this._target.fireEventToTools('Log.entryAdded', {
+            entry: consoleMessage
+        });
+
         return Promise.resolve(null);
     }
 
