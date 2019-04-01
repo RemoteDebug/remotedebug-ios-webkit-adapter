@@ -128,7 +128,7 @@ npm install
 npm start
 ```
 
-## Diganostics logging
+## Diagnostics logging
 
 ```
 DEBUG=remotedebug npm start
