@@ -2,13 +2,17 @@
   "name": "remotedebug-ios-webkit-adapter",
   "productName": "RemoteDebug iOS WebKit Adapter",
   "version": "0.3.2",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter.git"
+  },
   "bin": {
     "remotedebug_ios_webkit_adapter": "./out/index.js"
   },
   "scripts": {
-    "start": "gulp build && node out/index.js",
+    "start": "node out/index.js",
     "build": "gulp build",
-    "prepublish": "gulp build",
+    "prepare": "gulp build",
     "watch": "gulp watch",
     "test": "gulp test",
     "lint": "gulp lint"
@@ -26,16 +30,18 @@
     "ws": "^1.1.0"
   },
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-mocha": "^2.2.0",
+    "@types/request": "^2.48.1",
+    "@types/which": "^1.3.1",
+    "@types/ws": "^6.0.1",
+    "gulp": "^4.0.0",
+    "gulp-mocha": "^6.0.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-tslint": "^7.1.0",
-    "gulp-typescript": "^3.1.5",
-    "mocha": "^2.5.3",
+    "gulp-typescript": "^5.0.1",
     "mock-socket": "^3.0.1",
     "mockery": "^1.7.0",
-    "tslint": "^3.15.1",
-    "typemoq": "0.0.6",
-    "typescript": "2.2.2"
+    "tslint": "^5.16.0",
+    "typemoq": "^2.1.0",
+    "typescript": "^3.4.3"
   }
 }

@@ -48,11 +48,11 @@ export class Target extends EventEmitter {
 
         // Create a connection to the real websocket endpoint
         this._wsTarget = new WebSocket(url);
-        this._wsTarget.on('error', (err) => {
+        this._wsTarget.on('error', (err: string) => {
             Logger.error(err);
         });
 
-        this._wsTarget.on('message', (message) => {
+        this._wsTarget.on('message', (message: string) => {
             this.onMessageFromTarget(message);
         });
         this._wsTarget.on('open', () => {
@@ -166,7 +166,7 @@ export class Target extends EventEmitter {
 
     private onMessageFromTarget(rawMessage: string): void {
         const msg = JSON.parse(rawMessage);
-
+        
         if ('id' in msg) {
             if (this._toolRequestMap.has(msg.id)) {
                 // Reply to tool request

@@ -148,7 +148,7 @@ export class ProxyServer extends EventEmitter {
     }
 
     private onWSSConnection(ws: ws): void {
-        const url = ws.upgradeReq.url;
+        const url = ws['upgradeReq'].url;//IncomingMessage {_readableState: ReadableState, readable: true, _events: Object, …}
 
         debug('server.ws.onWSSConnection', url)
 

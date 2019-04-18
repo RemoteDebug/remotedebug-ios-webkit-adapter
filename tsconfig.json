@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "module": "commonjs",
+        "outDir": "out",
         "target": "ES2016",
         "types": [
             "node"

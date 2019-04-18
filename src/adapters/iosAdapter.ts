@@ -36,7 +36,7 @@ export class IOSAdapter extends AdapterCollection {
 
     public getTargets(): Promise<ITarget[]> {
         debug(`iOSAdapter.getTargets`)
-        Logger.log('iosAdapter.getTargets');
+        //Logger.log('iosAdapter.getTargets');
 
         return new Promise((resolve) => {
             request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
@@ -97,7 +97,7 @@ export class IOSAdapter extends AdapterCollection {
         }).then((devices: IIOSDeviceTarget[]) => {
             // Now get the targets for each device adapter in our list
             return super.getTargets(devices);
-        });
+        }).catch();
     }
 
     public connectTo(url: string, wsFrom: WebSocket): Target {

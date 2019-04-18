@@ -55,7 +55,7 @@ gulp.task('lint', function () {
     .pipe(tslint.report('verbose'))
 })
 
-gulp.task('test', ['build-tests'], function () {
+gulp.task('test', gulp.series('build-tests'), function test() {
   process.env.NODE_ENV = 'development'
   return gulp.src('out/test/**/*.test.js', { read: false })
     .pipe(mocha({ ui: 'tdd' }))
@@ -65,11 +65,11 @@ gulp.task('test', ['build-tests'], function () {
     })
 })
 
-gulp.task('watch-test', ['build-tests'], function () {
+gulp.task('watch-test', gulp.series('build-tests'), function watch_test() {
   return gulp.watch(shellSources, ['build-tests'])
 })
 
-gulp.task('watch', ['build'], function () {
+gulp.task('watch', gulp.series('build'), function watch() {
   const all = shellSources
   gulp.watch(all, ['build'])
 })
