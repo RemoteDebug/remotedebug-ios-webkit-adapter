@@ -169,7 +169,7 @@ export class IOSAdapter extends AdapterCollection {
         debug(`iOSAdapter.getDeviceInfoPath`)
         return new Promise((resolve, reject) => {
             if (os.platform() === 'win32') {
-                const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/vs-libimobile/lib/ideviceinfo.exe');
+                const proxy = path.resolve(__dirname, '../../../vs-libimobile/lib/ideviceinfo.exe');
                 try {
                     fs.statSync(proxy);
                     resolve(proxy);
