@@ -295,9 +295,9 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     private onEvaluate(msg: any): Promise<any> {
 
         if (msg.result && msg.result.wasThrown) {
-            msg.result.result.subtype = 'error';
+            msg.result.subtype = 'error';
             msg.result.exceptionDetails = {
-                text: msg.result.result.description,
+                text: msg.result.description,
                 url: '',
                 scriptId: this._lastScriptEval,
                 line: 1,
@@ -312,9 +312,9 @@ export abstract class IOSProtocol extends ProtocolAdapter {
                     }]
                 }
             };
-        } else if (msg.result && msg.result.result && msg.result.result.preview) {
-            msg.result.result.preview.description = msg.result.result.description;
-            msg.result.result.preview.type = 'object';
+        } else if (msg.result && msg.result && msg.result.preview) {
+            msg.result.preview.description = msg.result.description;
+            msg.result.preview.type = 'object';
         }
 
         return Promise.resolve(msg);
@@ -341,14 +341,14 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
         var newPropertyDescriptors = [];
 
-        for(var i = 0; i < msg.result.result.length; i++) {
-            if(msg.result.result[i].isOwn || msg.result.result[i].nativeGetter) {
-                msg.result.result[i].isOwn = true;
-                newPropertyDescriptors.push(msg.result.result[i]);
+        for(var i = 0; i < msg.result.length; i++) {
+            if(msg.result[i].isOwn || msg.result[i].nativeGetter) {
+                msg.result[i].isOwn = true;
+                newPropertyDescriptors.push(msg.result[i]);
             }
         }
-        msg.result.result = null;
-        msg.result.result = newPropertyDescriptors;
+        msg.result = null;
+        msg.result = newPropertyDescriptors;
 
         return Promise.resolve(msg);
     }    
@@ -521,10 +521,10 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     private onGetNavigationHistory(msg: any): Promise<any> {
         let href = '';
         this._target.callTarget('Runtime.evaluate', { expression: 'window.location.href' }).then((result) => {
-            href = result.result.value;
+            href = result.value;
             return this._target.callTarget('Runtime.evaluate', { expression: 'window.title' });
         }).then(result => {
-            const title = result.result.value;
+            const title = result.value;
             this._target.fireResultToTools(msg.id, { currentIndex: 0, entries: [{ id: 0, url: href, title: title }] });
         });
 
