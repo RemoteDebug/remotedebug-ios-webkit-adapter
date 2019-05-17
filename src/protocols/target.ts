@@ -19,6 +19,7 @@ export class Target extends EventEmitter {
     private _adapterRequestMap: Map<number, { resolve: (any) => void, reject: (any) => void }>;
     private _requestId: number;
     private _id: string;
+    private _targetId: string;
 
     constructor(targetId: string, data?: ITarget) {
         super();
@@ -165,22 +166,53 @@ export class Target extends EventEmitter {
     }
 
     private onMessageFromTarget(rawMessage: string): void {
-        const msg = JSON.parse(rawMessage);
+        const data = JSON.parse(rawMessage);
 
-        if ('id' in msg) {
-            if (this._toolRequestMap.has(msg.id)) {
+        // target based
+        let message;
+        const originalMethod = data.method;
+        if (data.params && data.params.message) {
+            message = JSON.parse(data.params.message);
+            let params = message.params || data.params;
+            let result = data.result;
+
+            if (message.result) {
+                result = message.result;
+                if (message.result.result) {
+                    result = message.result.result;
+                    if (message.result.result.value) {
+                        result = message.result.result.value;
+                        // only at this level is parsing the result necessary
+                        if (typeof result === 'string') {
+                            try {
+                                result = JSON.parse(result);
+                            } catch (ign) {
+                            }
+                        }
+                    }
+                }
+            }
+            data.method = message.method;
+            data.error = message.error;
+            data.id = message.id;
+            data.params = params;
+            data.result = result;
+        }
+
+        if (data.id !== undefined && originalMethod === 'Target.dispatchMessageFromTarget') {
+            if (this._toolRequestMap.has(data.id)) {
                 // Reply to tool request
-                let eventName = `target::${this._toolRequestMap.get(msg.id)}`;
-                this.emit(eventName, msg.params);
+                let eventName = `target::${this._toolRequestMap.get(data.id)}`;
+                this.emit(eventName, data.params);
 
-                this._toolRequestMap.delete(msg.id);
+                this._toolRequestMap.delete(data.id);
 
-                if ('error' in msg && this._messageFilters.has('target::error')) {
+                if (data.error && this._messageFilters.has('target::error')) {
                     eventName = 'target::error';
                 }
 
                 if (this._messageFilters.has(eventName)) {
-                    let sequence = Promise.resolve(msg);
+                    let sequence = Promise.resolve(data);
 
                     this._messageFilters.get(eventName).forEach((filter) => {
                         sequence = sequence.then((filteredMessage) => {
@@ -194,29 +226,34 @@ export class Target extends EventEmitter {
                     });
                 } else {
                     // Pass it on to the tools
+                    rawMessage = JSON.stringify(data);
                     this.sendToTools(rawMessage);
                 }
-            } else if (this._adapterRequestMap.has(msg.id)) {
+            } else if (this._adapterRequestMap.has(data.id)) {
                 // Reply to adapter request
-                const resultPromise = this._adapterRequestMap.get(msg.id);
-                this._adapterRequestMap.delete(msg.id);
+                const resultPromise = this._adapterRequestMap.get(data.id);
+                this._adapterRequestMap.delete(data.id);
 
-                if ('result' in msg) {
-                    resultPromise.resolve(msg.result);
-                } else if ('error' in msg) {
-                    resultPromise.reject(msg.error);
+                if ('result' in data) {
+                    resultPromise.resolve(data.result);
+                } else if ('error' in data) {
+                    resultPromise.reject(data.error);
                 } else {
                     Logger.error(`Unhandled type of request message from target ${rawMessage}`);
                 }
             } else {
                 Logger.error(`Unhandled message from target ${rawMessage}`);
             }
-        } else {
-            const eventName = `target::${msg.method}`;
-            this.emit(eventName, msg);
+        } else if (data.method) {
+            const eventName = `target::${data.method}`;
+            this.emit(eventName, data);
+
+            if (originalMethod === 'Target.targetCreated') {
+                this._targetId = data.params.targetInfo.targetId;
+            }
 
             if (this._messageFilters.has(eventName)) {
-                let sequence = Promise.resolve(msg);
+                let sequence = Promise.resolve(data);
 
                 this._messageFilters.get(eventName).forEach((filter) => {
                     sequence = sequence.then((filteredMessage) => {
@@ -230,6 +267,7 @@ export class Target extends EventEmitter {
                 });
             } else {
                 // Pass it on to the tools
+                rawMessage = JSON.stringify(data);
                 this.sendToTools(rawMessage);
             }
         }
@@ -245,6 +283,20 @@ export class Target extends EventEmitter {
 
     private sendToTarget(rawMessage: string): void {
         debug(`sendToTarget.${rawMessage}`);
+
+        // target based
+        const request = JSON.parse(rawMessage);
+        request.params = {
+            id: request.id,
+            message: JSON.stringify({
+                id: request.id,
+                method: request.method,
+                params: request.params
+            }),
+            targetId: this._targetId
+        };
+        request.method = 'Target.sendMessageToTarget';
+        rawMessage = JSON.stringify(request);
 
         // Make sure the target socket can receive messages
         if (this.isSocketConnected(this._wsTarget)) {
