@@ -44,7 +44,7 @@ export class ProxyServer extends EventEmitter {
 
         // Start server and return the port number
         this._hs.listen(this._serverPort);
-        const port = this._hs.address().port;
+        const port = (<AddressInfo>this._hs.address()).port;
 
         const settings = await IOSAdapter.getProxySettings({
             proxyPath: null,
