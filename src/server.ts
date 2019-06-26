@@ -12,6 +12,7 @@ import { Logger, debug } from './logger';
 import { Adapter } from './adapters/adapter';
 import { IOSAdapter } from './adapters/iosAdapter';
 import { IIOSProxySettings } from './adapters/adapterInterfaces';
+import { AddressInfo } from 'net';
 // import { TestAdapter } from './adapters/testAdapter';
 
 export class ProxyServer extends EventEmitter {
@@ -22,15 +23,15 @@ export class ProxyServer extends EventEmitter {
     private _adapter: Adapter;
     private _clients: Map<ws, string>;
     private _targetFetcherInterval: NodeJS.Timer;
+    private _unixPort: string;
 
     constructor() {
         super();
     }
 
-    public async run(serverPort: number): Promise<number> {
+    public async run(serverPort: number, simUDID: string): Promise<number> {
         this._serverPort = serverPort;
         this._clients = new Map<ws, string>();
-
         debug('server.run, port=%s', serverPort)
 
         this._es = express();
@@ -39,7 +40,9 @@ export class ProxyServer extends EventEmitter {
             server: this._hs
         });
         this._wss.on('connection', (a) => this.onWSSConnection(a));
-
+        if (simUDID) {
+            this._unixPort = await IOSAdapter.getSimulatorUnixSocket(simUDID)
+        }
         this.setupHttpHandlers();
 
         // Start server and return the port number
@@ -49,7 +52,8 @@ export class ProxyServer extends EventEmitter {
         const settings = await IOSAdapter.getProxySettings({
             proxyPath: null,
             proxyPort: (port + 100),
-            proxyArgs: null
+            proxyArgs: null,
+            unixPort: this._unixPort
         });
 
         this._adapter = new IOSAdapter(`/ios`, `ws://localhost:${port}`, <IIOSProxySettings>settings);

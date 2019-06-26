@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as WebSocket from 'ws';
 import * as which from 'which'
-import { execFile } from 'child-process-promise';
+import { exec, execFile } from 'child-process-promise';
 import { Logger, debug } from '../logger';
 import { Adapter } from './adapter';
 import { Target } from '../protocols/target';
@@ -129,6 +129,11 @@ export class IOSAdapter extends AdapterCollection {
             '--no-frontend',
             '--config=null:' + proxyPort + ',:' + (proxyPort + 1) + '-' + (proxyPort + 101)
         ];
+        if (args.unixPort) {
+            proxyArgs.push(
+                `-s`, `unix:${args.unixPort}`
+            )
+        }
 
         settings = {
             proxyPath: proxyPath,
@@ -137,6 +142,30 @@ export class IOSAdapter extends AdapterCollection {
         };
 
         return settings;
+    }
+
+    public static getSimulatorUnixSocket(simUDID: string): Promise<string|null> {
+        debug(`iOSAdapter.getSimulatorUnixSocket`);
+        return new Promise(async (resolve, reject) => {
+            try {
+                const { stdout } = await exec('lsof -aUc launchd_sim');
+                for (const output of stdout.split('com\.apple\.CoreSimulator\.SimDevice.')) {
+                    if (!output.includes(simUDID)) {
+                        continue;
+                    }
+
+                    const match = /\s+(\S+com\.apple\.webinspectord_sim\.socket)/.exec(output);
+
+                    if (!match) {
+                        return resolve(null);
+                    }
+
+                    return resolve(match[1]);
+                }
+            } catch (error) {
+                return reject(error);
+            }
+        });
     }
 
     private static getProxyPath(): Promise<string> {
