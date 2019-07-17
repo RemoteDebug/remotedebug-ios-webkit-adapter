@@ -47,24 +47,24 @@ export class Adapter extends EventEmitter {
     }
 
     public get id(): string {
-        debug(`adapter.id`)
+        debug(`adapter.id`);
         return this._id;
     }
 
     public start(): Promise<any> {
-        debug(`adapter.start`, this._options)
+        debug(`adapter.start`, this._options);
 
         if (!this._options.proxyExePath) {
-            debug(`adapter.start: Skip spawnProcess, no proxyExePath available`)
-            return Promise.resolve(`skipped`)
+            debug(`adapter.start: Skip spawnProcess, no proxyExePath available`);
+            return Promise.resolve(`skipped`);
         }
-        
-        return this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs)
+
+        return this.spawnProcess(this._options.proxyExePath, this._options.proxyExeArgs);
 
     }
 
     public stop(): void {
-        debug(`adapter.stop`)
+        debug(`adapter.stop`);
         if (this._proxyProc) {
             // Terminate the proxy process
             this._proxyProc.kill('SIGTERM');
@@ -73,7 +73,7 @@ export class Adapter extends EventEmitter {
     }
 
     public getTargets(metadata?: any): Promise<ITarget[]> {
-        debug(`adapter.getTargets, metadata=${metadata}`)
+        debug(`adapter.getTargets, metadata=${metadata}`);
         return new Promise((resolve, reject) => {
             request(this._url, (error: any, response: http.IncomingMessage, body: any) => {
                 if (error) {
@@ -93,15 +93,15 @@ export class Adapter extends EventEmitter {
     }
 
     public connectTo(targetId: string, wsFrom: WebSocket): Target {
-        debug(`adapter.connectTo, targetId=${targetId}`)
+        debug(`adapter.connectTo, targetId=${targetId}`);
         if (!this._targetIdToTargetDataMap.has(targetId)) {
             Logger.error(`No endpoint url found for id ${targetId}`);
             return null;
         } else if (this._targetMap.has(targetId)) {
-            Logger.log(`Existing target found for id ${targetId}`);
-            const target = this._targetMap.get(targetId);
-            target.updateClient(wsFrom);
-            return target;
+            debug(`Existing target found for id ${targetId}`);
+            const existingTarget = this._targetMap.get(targetId);
+            existingTarget.updateClient(wsFrom);
+            return existingTarget;
         }
 
         const targetData = this._targetIdToTargetDataMap.get(targetId);
@@ -118,7 +118,7 @@ export class Adapter extends EventEmitter {
     }
 
     public forwardTo(targetId: string, message: string): void {
-        debug(`adapter.forwardTo, targetId=${targetId}`)
+        debug(`adapter.forwardTo, targetId=${targetId}`);
         if (!this._targetMap.has(targetId)) {
             Logger.error(`No target found for id ${targetId}`);
             return;
@@ -128,14 +128,14 @@ export class Adapter extends EventEmitter {
     }
 
     public forceRefresh() {
-        debug('adapter.forceRefresh')
+        debug('adapter.forceRefresh');
         if (this._proxyProc && this._options.proxyExePath && this._options.proxyExeArgs) {
             this.refreshProcess(this._proxyProc, this._options.proxyExePath, this._options.proxyExeArgs);
         }
     }
 
     protected setTargetInfo(t: ITarget, metadata?: any): ITarget {
-        debug('adapter.setTargetInfo', t, metadata)
+        debug('adapter.setTargetInfo', t, metadata);
 
         // Ensure there is a valid id
         const id: string = (t.id || t.webSocketDebuggerUrl);
@@ -161,17 +161,17 @@ export class Adapter extends EventEmitter {
     }
 
     protected refreshProcess(process: ChildProcess, path: string, args: string[]): Promise<ChildProcess> {
-        debug('adapter.refreshProcess')
+        debug('adapter.refreshProcess');
         process.kill('SIGTERM');
         return this.spawnProcess(path, args);
     }
 
     protected spawnProcess(path: string, args: string[]): Promise<ChildProcess> {
-        debug(`adapter.spawnProcess, path=${path}`, )
+        debug(`adapter.spawnProcess, path=${path}`);
 
         return new Promise((resolve, reject) => {
             if (this._proxyProc) {
-                reject('adapter.spawnProcess.error, err=process already started')
+                reject('adapter.spawnProcess.error, err=process already started');
             }
 
             this._proxyProc = spawn(path, args, {
@@ -180,27 +180,27 @@ export class Adapter extends EventEmitter {
             });
 
             this._proxyProc.on('error', err => {
-                debug(`adapter.spawnProcess.error, err=${err}`)
-                reject(`adapter.spawnProcess.error, err=${err}`)
+                debug(`adapter.spawnProcess.error, err=${err}`);
+                reject(`adapter.spawnProcess.error, err=${err}`);
             });
 
             this._proxyProc.on('close', (code) => {
-                debug(`adapter.spawnProcess.close, code=${code}`)
-                reject(`adapter.spawnProcess.close, code=${code}`)
-            });      
+                debug(`adapter.spawnProcess.close, code=${code}`);
+                reject(`adapter.spawnProcess.close, code=${code}`);
+            });
 
             this._proxyProc.stdout.on('data', data => {
-                debug(`adapter.spawnProcess.stdout, data=${data.toString()}`)
+                debug(`adapter.spawnProcess.stdout, data=${data.toString()}`);
             });
 
             this._proxyProc.stderr.on('data', data => {
-                debug(`adapter.spawnProcess.stderr, data=${data.toString()}`)
-            });    
+                debug(`adapter.spawnProcess.stderr, data=${data.toString()}`);
+            });
 
             setTimeout(() => {
                 resolve(this._proxyProc);
-            }, 200);    
+            }, 200);
 
-        })
+        });
     }
 }
