@@ -2,8 +2,6 @@
 // Copyright (C) Microsoft. All rights reserved.
 //
 
-/// <reference path="../../src/lib/mock-socket.d.ts" />
-
 import * as assert from 'assert';
 import * as mockery from 'mockery';
 import * as mocha from "mocha";
@@ -14,7 +12,7 @@ import { Target } from '../../src/protocols/target';
 // As of 0.1.0, the included .d.ts is not in the right format to use the import syntax here
 // https://github.com/florinn/typemoq/issues/4
 // const typemoq: ITypeMoqStatic = require('typemoq');
-import { Mock, MockBehavior } from 'typemoq';
+import * as TypeMoq from "typemoq";
 
 const MODULE_UNDER_TEST = '../../protocols/target';
 
@@ -26,7 +24,7 @@ function CreateTarget(): Target {
 suite('Proxy/Protocol/Target', () => {
     const targetUrl = 'ws://localhost:8080';
     const toolsUrl = 'ws://localhost:9090';
-    let loggerMock: Mock<LoggerMock>;
+    let loggerMock: TypeMoq.IMock<LoggerMock>
     let targetServer: any;
     let toolsServer: any;
     let toolSocket: any;
@@ -58,7 +56,7 @@ suite('Proxy/Protocol/Target', () => {
         // SocketIO has most of them minus the OPEN/CLOSED boolean. We only care about OPEN so lets just add this functionality on here.
         SocketIO.OPEN = 1;
 
-        loggerMock = Mock.ofType(new LoggerMock(), MockBehavior.Loose);
+        loggerMock = TypeMoq.Mock.ofType(LoggerMock, TypeMoq.MockBehavior.Loose);
         mockery.registerMock('../../shell/logger', { Logger: loggerMock.object });
 
         targetServer = new Server(targetUrl);
