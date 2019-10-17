@@ -8,6 +8,9 @@ RemoteDebug iOS WebKit Adapter is an protocol adapter that Safari and WebViews o
 
 Read more in the introduction blog post on Medium: [Hello RemoteDebug iOS WebKit Adapter: iOS web debugging with Chrome DevTools, VS Code & Mozilla Debugger.html 📡📱](https://medium.com/@auchenberg/hello-remotedebug-ios-webkit-adapter-ios-web-debugging-with-chrome-devtools-vs-code-mozilla-2a8553df7465)
 
+>**Important message for Windows users!**   
+>Currently the adapter doesn't work for IOS 12+. For IOS 11 there are a few additional steps, as described [here](https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/issues/79#issuecomment-351472710).
+
 ## Getting Started
 
 ### 1) Install dependencies
@@ -19,6 +22,8 @@ Before you use this adapter you need to make sure you have the [latest version o
 Follow the instructions to install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy#installation)  and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice)
 
 #### Windows
+
+>See the above warning for Windows users
 
 Install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-proxy#installation)  and [libimobiledevice](https://github.com/libimobiledevice/libimobiledevice). On Windows you can use [scoop](http://scoop.sh/):
 
