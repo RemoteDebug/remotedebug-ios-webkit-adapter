@@ -6,13 +6,12 @@
 
 const gulp = require('gulp')
 const mocha = require('gulp-mocha')
-const sourcemaps = require('gulp-sourcemaps')
-const tslint = require('gulp-tslint')
+const gtslint = require('gulp-tslint')
 const ts = require('gulp-typescript')
-const log = require('gulp-util').log
-const typescript = require('typescript')
-const fs = require('fs')
-const path = require('path')
+const log = require('fancy-log')
+const tslint = require('tslint');
+
+const program = tslint.Linter.createProgram("./tsconfig.json", ".");
 
 const shellSources = [
   'src/**/*.ts',
@@ -49,10 +48,12 @@ gulp.task('build-tests', function () {
 })
 
 gulp.task('lint', function () {
-  console.log(lintSources)
   return gulp.src(lintSources)
-    .pipe(tslint({formatter: 'full'}))
-    .pipe(tslint.report('verbose'))
+    .pipe(gtslint({
+      formatter: 'verbose',
+      program: program
+    }))
+    // .pipe(gtslint.report())
 })
 
 gulp.task('test', gulp.series('build-tests', function () {
