@@ -39,7 +39,7 @@ export class ProxyServer extends EventEmitter {
         this._wss = new WebSocketServer({
             server: this._hs
         });
-        this._wss.on('connection', (a) => this.onWSSConnection(a));
+        this._wss.on('connection', (a, req) => this.onWSSConnection(a, req));
 
         this.setupHttpHandlers();
 
@@ -145,8 +145,8 @@ export class ProxyServer extends EventEmitter {
 
     }
 
-    private onWSSConnection(ws: ws): void {
-        const url = ws.upgradeReq.url;
+    private onWSSConnection(ws: ws, req: http.IncomingMessage): void {
+        const url = req.url;
 
         debug('server.ws.onWSSConnection', url);
 
