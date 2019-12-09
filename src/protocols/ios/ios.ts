@@ -623,11 +623,13 @@ export abstract class IOSProtocol extends ProtocolAdapter {
 
     protected enumerateStyleSheets(): void {
         this._target.callTarget('CSS.getAllStyleSheets', {}).then((msg) => {
-            for (let header of msg.headers) {
-                header.isInline = false;
-                header.startLine = 0;
-                header.startColumn = 0;
-                this._target.fireEventToTools('CSS.styleSheetAdded', { header: header });
+            if (msg.headers) {
+                for (let header of msg.headers) {
+                    header.isInline = false;
+                    header.startLine = 0;
+                    header.startColumn = 0;
+                    this._target.fireEventToTools('CSS.styleSheetAdded', { header: header });
+                }
             }
         });
     }

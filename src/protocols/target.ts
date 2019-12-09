@@ -19,6 +19,8 @@ export class Target extends EventEmitter {
     private _adapterRequestMap: Map<number, { resolve: (any) => void, reject: (any) => void }>;
     private _requestId: number;
     private _id: string;
+    private _targetBased: boolean;
+    private _targetId: string;
 
     constructor(targetId: string, data?: ITarget) {
         super();
@@ -28,6 +30,8 @@ export class Target extends EventEmitter {
         this._toolRequestMap = new Map<number, string>();
         this._adapterRequestMap = new Map<number, { resolve: (any) => void, reject: (any) => void }>();
         this._requestId = 0;
+        this._targetBased = false;
+        this._targetId = null;
 
         // Chrome currently uses id, iOS usies appId
         this._id = targetId;
@@ -35,6 +39,14 @@ export class Target extends EventEmitter {
 
     public get data(): ITarget {
         return this._data;
+    }
+
+    public set targetBased(isTargetBased: boolean) {
+        this._targetBased = isTargetBased;
+    }
+
+    public set targetId(targetId: string) {
+        this._targetId = targetId;
     }
 
     public connectTo(url: string, wsFrom: WebSocket): void {
@@ -165,7 +177,17 @@ export class Target extends EventEmitter {
     }
 
     private onMessageFromTarget(rawMessage: string): void {
-        const msg = JSON.parse(rawMessage);
+        let msg = JSON.parse(rawMessage);
+
+        if (this._targetBased) {
+            if (!msg.method || !msg.method.match(/^Target/)) {
+                return;
+            }
+            if (msg.method === 'Target.dispatchMessageFromTarget') {
+                rawMessage = msg.params.message;
+                msg = JSON.parse(rawMessage);
+            }
+        }
 
         if ('id' in msg) {
             if (this._toolRequestMap.has(msg.id)) {
@@ -245,6 +267,22 @@ export class Target extends EventEmitter {
 
     private sendToTarget(rawMessage: string): void {
         debug(`sendToTarget.${rawMessage}`);
+        if (this._targetBased) {
+            const message = JSON.parse(rawMessage);
+            if (!message.method.match(/^Target/)) {
+                const newMessage = {
+                    id: message.id,
+                    method: 'Target.sendMessageToTarget',
+                    params: {
+                        id: message.id,
+                        message: JSON.stringify(message),
+                        targetId: this._targetId
+                    }
+                };
+                rawMessage = JSON.stringify(newMessage);
+                debug(`sendToTarget.targeted.${rawMessage}`);
+            }
+        }
 
         // Make sure the target socket can receive messages
         if (this.isSocketConnected(this._wsTarget)) {
