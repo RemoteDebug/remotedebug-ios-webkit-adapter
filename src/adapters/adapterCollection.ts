@@ -18,19 +18,19 @@ export class AdapterCollection extends Adapter {
     }
 
     public start(): Promise<any> {
-        debug(`adapterCollection.start`, this._adapters)
-        
-        var startPromises = [super.start()];
-        
+        debug(`adapterCollection.start`, this._adapters);
+
+        const startPromises = [super.start()];
+
         this._adapters.forEach((adapter) => {
             startPromises.push(adapter.start());
-        })
+        });
 
-        return Promise.all(startPromises)
+        return Promise.all(startPromises);
     }
 
     public stop(): void {
-        debug(`adapterCollection.stop`)
+        debug(`adapterCollection.stop`);
         super.stop();
         this._adapters.forEach((adapter) => {
             adapter.stop();
@@ -38,7 +38,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public forceRefresh(): void {
-        debug(`adapterCollection.forceRefresh`)
+        debug(`adapterCollection.forceRefresh`);
         super.forceRefresh();
         this._adapters.forEach((adapter) => {
             adapter.forceRefresh();
@@ -70,7 +70,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public connectTo(url: string, wsFrom: WebSocket): Target {
-        debug(`adapterCollection.connectTo, url=${url}`)
+        debug(`adapterCollection.connectTo, url=${url}`);
         const id = this.getWebSocketId(url);
 
         let target: Target = null;
@@ -82,7 +82,7 @@ export class AdapterCollection extends Adapter {
     }
 
     public forwardTo(url: string, message: string): void {
-        debug(`adapterCollection.forwardTo, url=${url}`)
+        debug(`adapterCollection.forwardTo, url=${url}`);
         const id = this.getWebSocketId(url);
 
         if (this._adapters.has(id.adapterId)) {
@@ -91,7 +91,7 @@ export class AdapterCollection extends Adapter {
     }
 
     private getWebSocketId(url: string): { adapterId: string, targetId: string } {
-        debug(`adapterCollection.getWebSocketId, url=${url}`)
+        debug(`adapterCollection.getWebSocketId, url=${url}`);
         const index = url.indexOf('/', 1);
         const adapterId = url.substr(0, index);
         const targetId = url.substr(index + 1);
