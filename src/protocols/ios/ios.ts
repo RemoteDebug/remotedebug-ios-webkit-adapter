@@ -7,8 +7,8 @@ import { Target } from '../target';
 import { Logger } from '../../logger';
 import { ScreencastSession } from './screencast';
 
-declare var document: any
-declare var MouseEvent: any
+declare var document: any;
+declare var MouseEvent: any;
 
 interface IRange {
     startLine: number;
@@ -240,7 +240,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onDebuggerEnable(msg: any): Promise<any> {
-        this._target.callTarget('Debugger.setBreakpointsActive', { active: true }) 
+        this._target.callTarget('Debugger.setBreakpointsActive', { active: true });
         return Promise.resolve(msg);
     }
 
@@ -248,22 +248,22 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         const result = msg.result;
 
         if (result) {
-			// Convert all the rules into the chrome format
-			for (let i in result.matchedCSSRules) {
-				if (result.matchedCSSRules[i].rule) {
-					this.mapRule(result.matchedCSSRules[i].rule);
-				}
-			}
+            // Convert all the rules into the chrome format
+            for (let i in result.matchedCSSRules) {
+                if (result.matchedCSSRules[i].rule) {
+                    this.mapRule(result.matchedCSSRules[i].rule);
+                }
+            }
 
-			for (let i in result.inherited) {
-				if (result.inherited[i].matchedCSSRules) {
-					for (let j in result.inherited[i].matchedCSSRules) {
-						if (result.inherited[i].matchedCSSRules[j].rule) {
-							this.mapRule(result.inherited[i].matchedCSSRules[j].rule);
-						}
-					}
-				}
-			}
+            for (let i in result.inherited) {
+                if (result.inherited[i].matchedCSSRules) {
+                    for (let j in result.inherited[i].matchedCSSRules) {
+                        if (result.inherited[i].matchedCSSRules[j].rule) {
+                            this.mapRule(result.inherited[i].matchedCSSRules[j].rule);
+                        }
+                    }
+                }
+            }
         }
 
         return Promise.resolve(msg);
@@ -276,16 +276,16 @@ export abstract class IOSProtocol extends ProtocolAdapter {
                 msg.params.context.origin = msg.params.context.name;
             }
 
-            if(msg.params.context.isPageContext) {
-                this._lastPageExecutionContextId = msg.params.context.id
+            if (msg.params.context.isPageContext) {
+                this._lastPageExecutionContextId = msg.params.context.id;
             }
 
-            if(msg.params.context.frameId) {
+            if (msg.params.context.frameId) {
                 msg.params.context.auxData = {
                     frameId: msg.params.context.frameId,
                     isDefault: true
-                }
-                delete msg.params.context.frameId
+                };
+                delete msg.params.context.frameId;
             }
         }
 
@@ -321,16 +321,16 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onRuntimeOnCompileScript(msg: any): Promise<any> {
-        var params = {
+        const params = {
             expression: msg.params.expression,
             contextId: msg.params.executionContextId
-        }
+        };
 
         this._target.callTarget('Runtime.evaluate', params).then((obj) => {
-            var results = {
+            const results = {
                 scriptId: null,
                 exceptionDetails: null
-            }
+            };
             this._target.fireResultToTools(msg.id, results);
         });
 
@@ -338,11 +338,10 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onRuntimeGetProperties(msg: any): Promise<any> {
+        const newPropertyDescriptors = [];
 
-        var newPropertyDescriptors = [];
-
-        for(var i = 0; i < msg.result.result.length; i++) {
-            if(msg.result.result[i].isOwn || msg.result.result[i].nativeGetter) {
+        for (let i = 0; i < msg.result.result.length; i++) {
+            if (msg.result.result[i].isOwn || msg.result.result[i].nativeGetter) {
                 msg.result.result[i].isOwn = true;
                 newPropertyDescriptors.push(msg.result.result[i]);
             }
@@ -351,7 +350,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         msg.result.result = newPropertyDescriptors;
 
         return Promise.resolve(msg);
-    }    
+    }
 
     private onScriptParsed(msg: any): Promise<any> {
         this._lastScriptEval = msg.params.scriptId;
@@ -591,12 +590,12 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     private onConsoleMessageAdded(msg: any): Promise<any> {
         let message = msg.params.message;
         let type;
-        if(message.type === "log") {
-            switch(message.level) {
-                    case "log": type = "log"; break;
-                    case "info": type = "info"; break;
-                    case "error": type = "error"; break;
-                    default: type = "log";
+        if (message.type === 'log') {
+            switch (message.level) {
+                case 'log': type = 'log'; break;
+                case 'info': type = 'info'; break;
+                case 'error': type = 'error'; break;
+                default: type = 'log';
             }
         } else {
             type = message.type;
@@ -612,7 +611,7 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             stackTrace: message.stackTrace ? {
                 callFrames: message.stackTrace
             } : undefined,
-            networkRequestId: message.networkRequestId,
+            networkRequestId: message.networkRequestId
         };
 
         this._target.fireEventToTools('Log.entryAdded', {
@@ -655,8 +654,8 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             for (let i = 0; i < disabled.length; i++) {
                 const text = disabled[i].content.trim().replace(/^\/\*\s*/, '').replace(/;\s*\*\/$/, '');
                 const parts = text.split(':');
-                
-                if(cssStyle.cssProperties) {
+
+                if (cssStyle.cssProperties) {
                     let index = cssStyle.cssProperties.length;
                     for (let j = 0; j < cssStyle.cssProperties.length; j++) {
                         if (cssStyle.cssProperties[j].range &&

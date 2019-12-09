@@ -145,15 +145,15 @@ export class ProxyServer extends EventEmitter {
 
     }
 
-    private onWSSConnection(ws: ws, req: http.IncomingMessage): void {
+    private onWSSConnection(websocket: ws, req: http.IncomingMessage): void {
         const url = req.url;
 
         debug('server.ws.onWSSConnection', url);
 
-        let connection = <EventEmitter>ws;
+        let connection = <EventEmitter>websocket;
 
         try {
-            this._adapter.connectTo(url, ws);
+            this._adapter.connectTo(url, websocket);
         } catch (err) {
             debug(`server.onWSSConnection.connectTo.error.${err}`);
         }
