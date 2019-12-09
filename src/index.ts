@@ -2,7 +2,7 @@
 
 import { ProxyServer } from './server';
 import * as optimist from 'optimist';
-import info from '../package.json';
+import * as info from '../package.json';
 
 process.title = 'remotedebug-ios-webkit-adapter';
 
