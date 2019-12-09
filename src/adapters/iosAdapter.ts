@@ -18,6 +18,7 @@ import { ITarget, IIOSDeviceTarget, IIOSProxySettings } from './adapterInterface
 import { IOSProtocol } from '../protocols/ios/ios';
 import { IOS8Protocol } from '../protocols/ios/ios8';
 import { IOS9Protocol } from '../protocols/ios/ios9';
+import { IOS12Protocol } from '../protocols/ios/ios12';
 
 export class IOSAdapter extends AdapterCollection {
     private _proxySettings: IIOSProxySettings;
@@ -208,6 +209,10 @@ export class IOSAdapter extends AdapterCollection {
             const major = parseInt(parts[0], 10);
             if (major <= 8) {
                 return new IOS8Protocol(target);
+            }
+            const minor = parseInt(parts[1], 10);
+            if (major > 12 || major >= 12 && minor >= 2) {
+                return new IOS12Protocol(target);
             }
         }
 
