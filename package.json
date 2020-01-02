@@ -1,7 +1,7 @@
 {
   "name": "remotedebug-ios-webkit-adapter",
   "productName": "RemoteDebug iOS WebKit Adapter",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "bin": {
     "remotedebug_ios_webkit_adapter": "./out/index.js"
   },
