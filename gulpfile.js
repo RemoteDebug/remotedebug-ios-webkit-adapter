@@ -67,10 +67,10 @@ gulp.task('test', gulp.series('build-tests', function () {
 }))
 
 gulp.task('watch-test', gulp.series('build-tests', function () {
-  return gulp.watch(shellSources, ['build-tests'])
+  return gulp.watch(shellSources, gulp.task('test'))
 }))
 
 gulp.task('watch', gulp.series('build', function () {
   const all = shellSources
-  gulp.watch(all, ['build'])
+  gulp.watch(all, gulp.task('build'))
 }))
