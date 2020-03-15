@@ -30,7 +30,6 @@ Install [ios-webkit-debug-proxy](https://github.com/google/ios-webkit-debug-prox
 ```
 scoop bucket add extras
 scoop install ios-webkit-debug-proxy
-npm install -g vs-libimobile
 ```
 
 

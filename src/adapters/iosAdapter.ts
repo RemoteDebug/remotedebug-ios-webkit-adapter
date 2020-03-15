@@ -49,29 +49,17 @@ export class IOSAdapter extends AdapterCollection {
                 resolve(devices);
             });
         }).then((devices: IIOSDeviceTarget[]) => {
-            // Now request the device version for each device found
-            const deviceVersions: Promise<IIOSDeviceTarget>[] = [];
             devices.forEach(d => {
-
-                let getter;
                 if (d.deviceId === 'SIMULATOR') {
                     d.version = '9.3.0'; // TODO: Find a way to auto detect version. Currently hardcoding it.
-                    getter = Promise.resolve(d);
+                } else if (d.deviceOSVersion) {
+                    d.version = d.deviceOSVersion;
                 } else {
-                    getter = this.getDeviceVersion(d.deviceId).then(v => {
-                        d.version = v;
-                        return Promise.resolve(d);
-                    }).catch((err) => {
-                        // Device version detection failed, using fallback
-                        debug(`error.iosAdapter.getTargets.getDeviceVersion.failed.fallback, device=${d}`);
-                        d.version = '9.3.0';
-                        return Promise.resolve(d);
-                    });
+                    debug(`error.iosAdapter.getTargets.getDeviceVersion.failed.fallback, device=${d}. Please update ios-webkit-debug-proxy to version 1.8.5`);
+                    d.version = '9.3.0';
                 }
-
-                deviceVersions.push(getter);
             });
-            return Promise.all(deviceVersions);
+            return Promise.resolve(devices);
         }).then((devices: IIOSDeviceTarget[]) => {
             // Now start up all the adapters
             devices.forEach(d => {
@@ -163,43 +151,6 @@ export class IOSAdapter extends AdapterCollection {
                 });
             }
         });
-    }
-
-    private static getDeviceInfoPath(): Promise<string> {
-        debug(`iOSAdapter.getDeviceInfoPath`);
-        return new Promise((resolve, reject) => {
-            if (os.platform() === 'win32') {
-                const proxy = path.resolve(__dirname, process.env.USERPROFILE + '/AppData/Roaming/npm/node_modules/vs-libimobile/lib/ideviceinfo.exe');
-                try {
-                    fs.statSync(proxy);
-                    resolve(proxy);
-                } catch (e) {
-                    reject(`ideviceinfo not found. Please install 'npm install -g vs-libimobile'`);
-                }
-
-            } else if (os.platform() === 'darwin' || os.platform() === 'linux') {
-                which('ideviceinfo', function (err, resolvedPath) {
-                    if (err) {
-                        reject('ideviceinfo not found. Please install libimobiledevice (https://github.com/libimobiledevice/libimobiledevice)');
-                    } else {
-                        resolve(resolvedPath);
-                    }
-                });
-            }
-        });
-    }
-
-    private async getDeviceVersion(uuid: string): Promise<string> {
-        debug(`iOSAdapter.getDeviceVersion`);
-        const _iDeviceInfoPath = await IOSAdapter.getDeviceInfoPath();
-        const proc = await execFile(_iDeviceInfoPath, ['-u', `${uuid}`, '-k', 'ProductVersion']);
-
-        let deviceVersion = '';
-        if (!proc.err) {
-            deviceVersion = proc.stdout.trim();
-        }
-
-        return deviceVersion;
     }
 
     private getProtocolFor(version: string, target: Target): IOSProtocol {

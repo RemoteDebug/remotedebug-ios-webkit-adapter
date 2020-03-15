@@ -28,6 +28,7 @@ export interface IAdapterOptions {
 export interface IIOSDeviceTarget {
     deviceId: string;
     deviceName: string;
+    deviceOSVersion: string;
     url: string;
     version: string;
 }
