@@ -592,10 +592,11 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         let type;
         if (message.type === 'log') {
             switch (message.level) {
-                case 'log': type = 'log'; break;
+                case 'log': type = 'info'; break;
                 case 'info': type = 'info'; break;
                 case 'error': type = 'error'; break;
-                default: type = 'log';
+                case 'warning': type = 'warning'; break;
+                default: type = 'info';
             }
         } else {
             type = message.type;
