@@ -95,6 +95,10 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         this._target.addMessageFilter('target::Runtime.getProperties', (msg) => this.onRuntimeGetProperties(msg));
 
         this._target.addMessageFilter('target::Inspector.inspect', (msg) => this.onInspect(msg));
+
+        this._target.addMessageFilter('tools::Overlay.enabled', (msg) => { this._target.fireResultToTools(msg.id, {}); return Promise.resolve(null); });
+        this._target.addMessageFilter('tools::Overlay.highlightNode', (msg) => this.onHighlightNode(msg));
+        this._target.addMessageFilter('tools::Overlay.hideHighlight', (msg) => { msg.method = 'DOM.hideHighlight'; return Promise.resolve(msg); });
     }
 
     private onDomGetDocument(): void {
@@ -375,6 +379,13 @@ export abstract class IOSProtocol extends ProtocolAdapter {
         delete msg.params.object;
         delete msg.params.hints;
         return Promise.resolve(msg);
+    }
+
+    private onHighlightNode(msg: any): Promise<any> {
+        delete msg.params.backendNodeId;
+        delete msg.params.selector;
+        this._target.callTarget('DOM.highlightNode', msg.params);
+        return Promise.resolve(null);
     }
 
     private DOMDebuggerOnGetEventListeners(msg: any): Promise<any> {
