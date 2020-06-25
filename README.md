@@ -51,7 +51,7 @@ npm install remotedebug-ios-webkit-adapter -g
 ### 3) Enable remote debugging in Safari
 In order for your iOS targets to show up, you need to enable remote debugging.
 
-Open iOS Settings => Safari preferences => enable "Web Inspector"
+Open iOS Settings => Safari preferences => Advanced => enable "Web Inspector"
 
 ### 4) Make your computer trust your iOS device.
 
