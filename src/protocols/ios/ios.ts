@@ -611,12 +611,17 @@ export abstract class IOSProtocol extends ProtocolAdapter {
             stackTrace: message.stackTrace ? {
                 callFrames: message.stackTrace
             } : undefined,
+            args: message.parameters,
             networkRequestId: message.networkRequestId
         };
 
-        this._target.fireEventToTools('Log.entryAdded', {
-            entry: consoleMessage
-        });
+        if (type === 'error') {
+            this._target.fireEventToTools('Log.entryAdded', {
+                entry: consoleMessage
+            });
+        } else {
+            this._target.fireEventToTools('Runtime.consoleAPICalled', consoleMessage);
+        }
 
         return Promise.resolve(null);
     }
