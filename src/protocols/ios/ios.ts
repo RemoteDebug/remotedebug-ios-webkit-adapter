@@ -342,16 +342,21 @@ export abstract class IOSProtocol extends ProtocolAdapter {
     }
 
     private onRuntimeGetProperties(msg: any): Promise<any> {
-        const newPropertyDescriptors = [];
+        // https://github.com/WebKit/webkit/blob/ead84eb927017e97281acd0d0e00ca224af57a9e/Source/JavaScriptCore/inspector/protocol/Runtime.json#L282
+        if (msg.result.properties) {
+            msg.result.result = msg.result.properties;
+        } else {
+            const newPropertyDescriptors = [];
 
-        for (let i = 0; i < msg.result.result.length; i++) {
-            if (msg.result.result[i].isOwn || msg.result.result[i].nativeGetter) {
-                msg.result.result[i].isOwn = true;
-                newPropertyDescriptors.push(msg.result.result[i]);
+            for (let i = 0; i < msg.result.result.length; i++) {
+                if (msg.result.result[i].isOwn || msg.result.result[i].nativeGetter) {
+                    msg.result.result[i].isOwn = true;
+                    newPropertyDescriptors.push(msg.result.result[i]);
+                }
             }
+            msg.result.result = null;
+            msg.result.result = newPropertyDescriptors;
         }
-        msg.result.result = null;
-        msg.result.result = newPropertyDescriptors;
 
         return Promise.resolve(msg);
     }
