@@ -1,8 +1,13 @@
+<p><strong>News:</strong> RemoteDebug is now superseeded by https://inspect.dev/ – a new developer tool for macOS and Windows to inspect and debug your web apps and websites in Safari and WebViews on iOS devices 🤯🎉🔥 </p>
+
 # RemoteDebug iOS WebKit Adapter
 
 ![Build](https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/workflows/Build/badge.svg)
 <a href="https://github.com/RemoteDebug/remotedebug-ios-webkit-adapter/releases"><img src="https://img.shields.io/github/release/RemoteDebug/remotedebug-ios-webkit-adapter.svg" alt="Release"></a>
 
+
+<p><strong>Maintenance status:</strong> RemoteDebug iOS WebKit Adapter is no proactively maintained or extended. The project is maintained on ad-hoc basis by a small group of maintainers who occasionally help out.</p>
+    
 RemoteDebug iOS WebKit Adapter is an protocol adapter that Safari and WebViews on iOS to be debugged from tools like VS Code, Chrome DevTools, Mozilla Debugger.html and other tools compatible with the Chrome Debugging Protocol.
 
 ![](.readme/overview.png)
