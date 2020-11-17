@@ -83,7 +83,7 @@ Open your favorite tool such as Chrome DevTools or Visual Studio Code and config
 Usage: remotedebug_ios_webkit_adapter --port [num]
 
 Options:
-  -p, --port  the adapter listerning post  [default: 9000]
+  -p, --port  the adapter listening port  [default: 9000]
   --version   prints current version
 
 ```
